@@ -1,11 +1,5 @@
 /* eslint-env browser */
-
-// Works too, but points to the classic ES5 version
-// import {Scene, PerspectiveCamera, WebGLRenderer, BoxGeometry, MeshBasicMaterial, Mesh} from 'three';
-
-// Until Webpack 2 supports "jsnext:main" or until three.js adds a "module" field
-import {Scene, PerspectiveCamera, WebGLRenderer, BoxGeometry, MeshBasicMaterial, Mesh} from 'three/build/three.modules';
-
+import {Scene, PerspectiveCamera, WebGLRenderer, BoxGeometry, MeshBasicMaterial, Mesh} from 'three';
 
 // Example converted from https://threejs.org/docs/index.html#Manual/Introduction/Creating_a_scene
 const scene = new Scene();
