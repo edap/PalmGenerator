@@ -6,6 +6,7 @@ export default class Cube {
         let material = new MeshBasicMaterial({color: 0x00ff00});
         let cube = new Mesh(geometry, material);
         this.mesh = cube;
+        //this.mesh.position.set(100,100,-100);
     };
 
     update(){

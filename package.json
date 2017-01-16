@@ -17,5 +17,9 @@
     "three": "^0.83.0",
     "webpack": "^2.2.0-rc.1",
     "webpack-dev-server": "^2.2.0-rc.0"
+  },
+  "dependencies": {
+    "dat-gui": "^0.5.0",
+    "three-orbit-controls": "^82.1.0"
   }
 }
