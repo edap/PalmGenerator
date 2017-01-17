@@ -8,7 +8,7 @@ export default class Sphere {
         var material = new MeshBasicMaterial( {color: 0x00ff00} );
         var sphere = new Mesh( geometry, material );
         this.mesh = sphere;
-        //this.mesh.position.set(x, y, 100);
+        this.mesh.position.set(x, y, 0);
     };
 
     update(){
