@@ -20,6 +20,8 @@ var params = {
     angle: 137.5,
     spread: 10,
     num: 100,
+    rotate_flower: false,
+    extrude_flower: false,
     pos_x: 0,
     pos_y: 0,
     pos_z: 0
@@ -29,12 +31,11 @@ var params = {
 gui.add(params, "pos_x").min(-10).max(10).step(1);
 gui.add(params, "pos_y").min(-10).max(10).step(1);
 gui.add(params, "pos_z").min(0).max(70).step(1);
-gui.add(params, "num").min(10).max(200).step(1);
-gui.add(params, "angle").min(100).max(300).step(1);
-gui.add(params, "spread").min(10).max(50).step(1);
+gui.add(params, "num").min(1).max(400).step(1);
+gui.add(params, "angle").min(130).max(140).step(0.2);
+gui.add(params, "spread").min(1).max(70).step(1);
 
 const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
-const radius = 5;
 var n = 0;
 const c = 2;
 
