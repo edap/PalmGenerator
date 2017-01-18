@@ -34,6 +34,8 @@ gui.add(params, "pos_z").min(0).max(70).step(1);
 gui.add(params, "num").min(1).max(400).step(1);
 gui.add(params, "angle").min(130).max(140).step(0.2);
 gui.add(params, "spread").min(1).max(70).step(1);
+gui.add(params, "rotate_flower");
+gui.add(params, "extrude_flower");
 
 const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
 var n = 0;
@@ -45,6 +47,12 @@ document.body.appendChild(renderer.domElement);
 
 camera.position.z = 80;
 this.controls = new OrbitControls(camera, renderer.domElement);
+
+
+//light
+var light = new THREE.PointLight( 0xff0000, 1, 100 );
+light.position.set( 50, 50, 50 );
+scene.add( light );
 
 //populateFlower();
 
@@ -61,6 +69,10 @@ function populateFlower() {
         let coord = phyllotaxis(i, params.angle, params.spread);
         let sphere = new THREE.Mesh(geometry, material);
         sphere.position.set(coord.x, coord.y, 0);
+        if(params.extrude_flower){
+            sphere.position.z = i * -.05;
+				    sphere.rotateY( (90 + 40 + i * 100/params.num ) * Math.PI/180.0 );
+        }
         objects.push(sphere);
         flower.add(sphere);
     }
@@ -86,6 +98,9 @@ function phyllotaxis(i, angle, spread){
 
 function render(){
     populateFlower();
+    if(params.rotate_flower){
+        flower.rotateZ( 0.0137);
+    }
 	  requestAnimationFrame(render);
 	  renderer.render(scene, camera);
     resetFlower();
