@@ -8,7 +8,7 @@ const widthSegments = 32;
 const heightSegments = 32;
 const radius = 5;
 var geometry = new THREE.SphereGeometry(radius, widthSegments, heightSegments);
-var material = new THREE.MeshBasicMaterial( {color: 0x00ff00} );
+var material = new THREE.MeshStandardMaterial( {color: 0x00ff00} );
 
 
 var objects = [];
