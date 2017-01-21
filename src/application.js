@@ -4,11 +4,15 @@ import Cube from './cube.js';
 import DAT from 'dat-gui';
 import {phyllotaxisSimple, phyllotaxisSphere} from './phillotaxis.js';
 
-//sphere
+//geometries
 const widthSegments = 32;
 const heightSegments = 32;
 const radius = 5;
-var geometry = new THREE.SphereGeometry(radius, widthSegments, heightSegments);
+const geometries = {
+    "sphere": new THREE.SphereGeometry(radius, widthSegments, heightSegments),
+    "box": new THREE.BoxGeometry( radius, radius, radius, 4, 4, 4 )
+};
+
 var material = new THREE.MeshStandardMaterial( {color: 0x00ff00} );
 
 
@@ -18,6 +22,7 @@ const scene = new THREE.Scene();
 const OrbitControls = require('three-orbit-controls')(THREE);
 const gui = new DAT.GUI();
 var params = {
+    geometry: "sphere",
     angle: 137.5,
     angle_b: 137.5,
     spread: 10,
@@ -31,6 +36,7 @@ var params = {
 
 
 gui.add(params, "num").min(1).max(800).step(1);
+gui.add(params, "geometry", ["sphere", "box"]);
 gui.add(params, "angle").min(132.0).max(138.0).step(0.1);
 gui.add(params, "angle_b").min(137.3).max(137.6).step(0.1);
 gui.add(params, "spread").min(0).max(20).step(0.1);
@@ -41,13 +47,9 @@ gui.add(params, "extrude_2Dflower");
 gui.add(params, "spherical");
 
 const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
-var n = 0;
-const c = 2;
-
 const renderer = new THREE.WebGLRenderer();
 renderer.setSize(window.innerWidth, window.innerHeight);
 document.body.appendChild(renderer.domElement);
-
 camera.position.z = 80;
 this.controls = new OrbitControls(camera, renderer.domElement);
 
@@ -67,22 +69,21 @@ window.addEventListener('resize', function() {
     camera.updateProjectionMatrix();
 });
 
-var bla =0.02;
-function populateFlower() {
+function populateFlower(selected_geometry) {
     for (var i = 0; i< params.num; i++) {
         let coord;
-        let sphere = new THREE.Mesh(geometry, material);
+        let object = new THREE.Mesh(selected_geometry, material);
         if (params.spherical) {
             coord = phyllotaxisSphere(i, params.angle, params.angle_b, params.spread, params.num);
-            sphere.position.set(coord.x, coord.y, coord.z);
+            object.position.set(coord.x, coord.y, coord.z);
         } else {
             coord = phyllotaxisSimple(i, params.angle, params.spread, params.extrude_2Dflower);
-            sphere.position.set(coord.x, coord.y, coord.z);
-				    sphere.rotateY( (90 + 40 + i * 100/params.num ) * Math.PI/180.0 );
+            object.position.set(coord.x, coord.y, coord.z);
+				    object.rotateY( (90 + 40 + i * 100/params.num ) * Math.PI/180.0 );
         }
 
-        objects.push(sphere);
-        flower.add(sphere);
+        objects.push(object);
+        flower.add(object);
     }
     scene.add(flower);
 }
@@ -97,7 +98,7 @@ function resetFlower(){
 }
 
 function render(){
-    populateFlower();
+    populateFlower(geometries[params.geometry]);
     if(params.rotate_flower){
         flower.rotateZ( 0.0137);
     }
