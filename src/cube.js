@@ -11,6 +11,6 @@ export default class Cube {
 
     update(){
         this.mesh.rotation.x += 1;
-	    this.mesh.rotation.y += 0.1;
+	      this.mesh.rotation.y += 0.1;
     };
 };
