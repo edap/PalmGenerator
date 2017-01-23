@@ -1,5 +1,5 @@
-export function phyllotaxisSimple(i, angle, spread, extrude){
-    let current_angle = i * angle;
+export function phyllotaxisSimple(i, angleInRadians, spread, extrude){
+    let current_angle = i * angleInRadians;
     let radius = spread * Math.sqrt(i);
     let x = radius * Math.cos(current_angle);
     let y = radius * Math.sin(current_angle);
@@ -11,8 +11,7 @@ export function phyllotaxisSimple(i, angle, spread, extrude){
 }
 
 export function phyllotaxisSphere(i, angle, angle_b, spread, tot){
-    let half_pi = 180.0;
-    let inc = half_pi / tot;
+    let inc = Math.PI / tot;
     let current_angle = i * inc;
     let current_angle_b= i * angle_b;
     let radius = spread * Math.sqrt(i);

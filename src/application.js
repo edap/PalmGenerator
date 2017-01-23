@@ -23,6 +23,7 @@ const materials = new CollectionMaterials;
 const geometries = new CollectionGeometries;
 var objects = [];
 var flower = new THREE.Group();
+let n_frames = 0;
 
 //lights
 let ambientLight = new THREE.AmbientLight( 0x000000 );
@@ -56,16 +57,18 @@ window.addEventListener('resize', function() {
 });
 
 function populateFlower(selected_geometry, selected_material) {
+    let angleInRadians = gui.params.angle * (Math.PI/180.0);
+    let angleBInRadians = gui.params.angle_b * (Math.PI/180.0);
     for (var i = 0; i< gui.params.num; i++) {
         let coord;
         let object = new THREE.Mesh(selected_geometry, selected_material);
         if (gui.params.spherical) {
-            coord = phyllotaxisSphere(i, gui.params.angle, gui.params.angle_b, gui.params.spread, gui.params.num);
+            coord = phyllotaxisSphere(i, angleInRadians, angleBInRadians, gui.params.spread, gui.params.num);
             object.position.set(coord.x, coord.y, coord.z);
         } else {
-            coord = phyllotaxisSimple(i, gui.params.angle, gui.params.spread, gui.params.extrude_2Dflower);
+            coord = phyllotaxisSimple(i, angleInRadians, gui.params.spread, gui.params.extrude_2Dflower);
             object.position.set(coord.x, coord.y, coord.z);
-				    object.rotateY( (90 + 40 + i * 100/gui.params.num ) * -Math.PI/180.0 );
+		    object.rotateY( (90 + 40 + i * 100/gui.params.num ) * -Math.PI/180.0 );
         }
 
         objects.push(object);
@@ -84,9 +87,14 @@ function resetFlower(){
 }
 
 function render(){
+    n_frames++;
+    let spread;
+    if(gui.params.anim_spread){
+        gui.params.spread = Math.sin(n_frames/100) * gui.params.amplitude;
+    }
     populateFlower(geometries[gui.params.geometry],materials[gui.params.material]);
     if(gui.params.rotate_flower){
-        flower.rotateZ( 0.0137);
+        flower.rotateZ(gui.params.rotation_speed);
     }
 	  requestAnimationFrame(render);
 	  renderer.render(scene, camera);
