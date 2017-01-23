@@ -25,7 +25,7 @@ export default class Gui extends DAT.GUI{
         };
 
 
-        this.add(this.params, "num").min(1).max(800).step(1);
+        this.add(this.params, "num").min(1).max(1200).step(1);
         this.add(this.params, "geometry", ["sphere", "box", "lathe", "leaf"]);
         this.add(this.params, "material", ["standard", "wireframe", "phong","lambert"]).onChange(this._updateMaterialFolder());
         this.add(this.params, "angle").min(132.0).max(138.0).step(0.01);
