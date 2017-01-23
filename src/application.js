@@ -96,8 +96,8 @@ function render(){
     if(gui.params.rotate_flower){
         flower.rotateZ(gui.params.rotation_speed);
     }
-	  requestAnimationFrame(render);
-	  renderer.render(scene, camera);
+	requestAnimationFrame(render);
+	renderer.render(scene, camera);
     resetFlower();
 }
 
