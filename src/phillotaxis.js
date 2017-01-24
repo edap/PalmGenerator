@@ -22,8 +22,8 @@ export function phyllotaxisApple(i, angle, angle_b, spread, tot){
 }
 
 // this function is called Wrong because it is wrong! it was born as mistake
-// while i was passing degreee without converting them to radians.
-// But sometimes there are strange patterns that generates a nice effect,
+// while i was passing angles in degreees without converting them to radians.
+// But sometimes there are strange patterns that generate a nice effect,
 // and I've decided to keep it
 // To use it, pass the angles in degrees
 export function phyllotaxisWrong(i, angle, angle_b, spread, tot){
