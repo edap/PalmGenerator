@@ -5,6 +5,7 @@ import {phyllotaxisSimple, phyllotaxisApple, phyllotaxisWrong} from './phillotax
 import CollectionGeometries from './geometries.js';
 import CollectionMaterials from './materials.js';
 
+const goldenRatio = 13.508;
 const gui = new Gui();
 const scene = new THREE.Scene();
 const OrbitControls = require('three-orbit-controls')(THREE);
@@ -96,14 +97,14 @@ function render(){
     n_frames++;
     let spread;
     if(gui.params.anim_spread){
-        gui.params.spread = Math.sin(n_frames/100) * gui.params.amplitude;
+        gui.params.spread = Math.abs(Math.sin(n_frames/100) * gui.params.amplitude);
     }
     populateFlower(geometries[gui.params.geometry],materials[gui.params.material]);
-    if(gui.params.rotate_flower){
-        flower.rotateZ(gui.params.rotation_speed);
+    if(gui.params.zoetrope){
+        flower.rotateZ(gui.params.zoetrope_angle);
     }
-	requestAnimationFrame(render);
-	renderer.render(scene, camera);
+    requestAnimationFrame(render);
+    renderer.render(scene, camera);
     resetFlower();
 }
 

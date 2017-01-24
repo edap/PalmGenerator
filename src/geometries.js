@@ -1,5 +1,4 @@
 import Cube from './cube.js';
-import LeafGeometry from './leafGeometry.js';
 import * as THREE from 'THREE';
 
 export default class CollectionGeometries{
@@ -16,7 +15,7 @@ export default class CollectionGeometries{
             "sphere": new THREE.SphereGeometry(radius, widthSegments, heightSegments),
             "box": new THREE.BoxGeometry( radius, radius, radius, 4, 4, 4 ),
             "lathe": new THREE.LatheBufferGeometry( lathePoints ),
-            "leaf": new LeafGeometry()
+            "cone": new THREE.ConeGeometry(radius, 20, 32)
         };
         return geometries;
     }

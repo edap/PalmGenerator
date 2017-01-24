@@ -10,23 +10,24 @@ export default class Gui extends DAT.GUI{
             }
         );
         this.params = {
-            geometry: "leaf",
+            geometry: "sphere",
             material: "standard",
-            modus: "flat",
+            modus: "apple",
             angle: 137.5,
             angle_b: 137.5,
             spread: 10,
             anim_spread: true,
-            num: 5,
+            num: 742,
+            zoetrope_rotation: 137.035,
             amplitude: 0.1,
-            rotate_flower: false,
-            rotation_speed:0.013,
+            zoetrope:true,
+            zoetrope_angle:139.71,
             extrude_2Dflower: false
         };
 
 
         this.add(this.params, "num").min(1).max(1200).step(1);
-        this.add(this.params, "geometry", ["sphere", "box", "lathe", "leaf"]);
+        this.add(this.params, "geometry", ["sphere", "box", "lathe", "cone"]);
         this.add(this.params, "material", ["standard", "wireframe", "phong","lambert"]).onChange(this._updateMaterialFolder());
         this.add(this.params, "modus", ["flat", "apple", "weird"]);
         this.add(this.params, "angle").min(132.0).max(138.0).step(0.01);
@@ -34,9 +35,9 @@ export default class Gui extends DAT.GUI{
         this.add(this.params, "spread").min(0).max(20).step(0.1).listen();
         this.add(this.params, "extrude_2Dflower");
         let anim = this.addFolder('animation');
-        anim.add(this.params, "rotate_flower");
         anim.add(this.params, "anim_spread");
-        anim.add(this.params, "rotation_speed").min(0.005).max(0.1).step(0.01);
+        anim.add(this.params, "zoetrope");
+        anim.add(this.params, "zoetrope_angle").min(130).max(150).step(0.01);
         anim.add(this.params, "amplitude").min(0).max(9).step(0.01);
 
     }
