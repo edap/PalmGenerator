@@ -1,7 +1,7 @@
 /* eslint-env browser */
 import * as THREE from 'three';
 import Gui from './gui.js';
-import {phyllotaxisSimple, phyllotaxisSphere} from './phillotaxis.js';
+import {phyllotaxisSimple, phyllotaxisApple, phyllotaxisWrong} from './phillotaxis.js';
 import CollectionGeometries from './geometries.js';
 import CollectionMaterials from './materials.js';
 
@@ -62,15 +62,21 @@ function populateFlower(selected_geometry, selected_material) {
     for (var i = 0; i< gui.params.num; i++) {
         let coord;
         let object = new THREE.Mesh(selected_geometry, selected_material);
-        if (gui.params.spherical) {
-            coord = phyllotaxisSphere(i, angleInRadians, angleBInRadians, gui.params.spread, gui.params.num);
-            object.position.set(coord.x, coord.y, coord.z);
-        } else {
-            coord = phyllotaxisSimple(i, angleInRadians, gui.params.spread, gui.params.extrude_2Dflower);
-            object.position.set(coord.x, coord.y, coord.z);
-		    object.rotateY( (90 + 40 + i * 100/gui.params.num ) * -Math.PI/180.0 );
+        switch(gui.params.modus){
+            case "apple":
+                coord = phyllotaxisApple(i, angleInRadians, angleBInRadians, gui.params.spread, gui.params.num);
+                object.position.set(coord.x, coord.y, coord.z);
+            break;
+            case "weird":
+                coord = phyllotaxisWrong(i, gui.params.angle_a, gui.params.angle_b, gui.params.spread, gui.params.num);
+                object.position.set(coord.x, coord.y, coord.z);
+            break;
+            default:
+                coord = phyllotaxisSimple(i, angleInRadians, gui.params.spread, gui.params.extrude_2Dflower);
+                object.position.set(coord.x, coord.y, coord.z);
+                object.rotateY( (90 + 40 + i * 100/gui.params.num ) * -Math.PI/180.0 );
+            break;
         }
-
         objects.push(object);
         flower.add(object);
     }

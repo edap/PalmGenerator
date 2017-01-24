@@ -12,13 +12,13 @@ export default class Gui extends DAT.GUI{
         this.params = {
             geometry: "leaf",
             material: "standard",
+            modus: "flat",
             angle: 137.5,
             angle_b: 137.5,
             spread: 10,
             anim_spread: true,
             num: 5,
             amplitude: 0.1,
-            spherical:false,
             rotate_flower: false,
             rotation_speed:0.013,
             extrude_2Dflower: false
@@ -28,11 +28,11 @@ export default class Gui extends DAT.GUI{
         this.add(this.params, "num").min(1).max(1200).step(1);
         this.add(this.params, "geometry", ["sphere", "box", "lathe", "leaf"]);
         this.add(this.params, "material", ["standard", "wireframe", "phong","lambert"]).onChange(this._updateMaterialFolder());
+        this.add(this.params, "modus", ["flat", "apple", "weird"]);
         this.add(this.params, "angle").min(132.0).max(138.0).step(0.01);
         this.add(this.params, "angle_b").min(137.3).max(137.6).step(0.01);
         this.add(this.params, "spread").min(0).max(20).step(0.1).listen();
         this.add(this.params, "extrude_2Dflower");
-        this.add(this.params, "spherical");
         let anim = this.addFolder('animation');
         anim.add(this.params, "rotate_flower");
         anim.add(this.params, "anim_spread");
