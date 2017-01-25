@@ -59,17 +59,16 @@ window.addEventListener('resize', function() {
 
 function populateFlower(selected_geometry, selected_material) {
     let angleInRadians = gui.params.angle * (Math.PI/180.0);
-    let angleBInRadians = gui.params.angle_b * (Math.PI/180.0);
     for (var i = 0; i< gui.params.num; i++) {
         let coord;
         let object = new THREE.Mesh(selected_geometry, selected_material);
         switch(gui.params.modus){
             case "apple":
-                coord = phyllotaxisApple(i, angleInRadians, angleBInRadians, gui.params.spread, gui.params.num);
+                coord = phyllotaxisApple(i, angleInRadians, gui.params.spread, gui.params.num);
                 object.position.set(coord.x, coord.y, coord.z);
             break;
             case "weird":
-                coord = phyllotaxisWrong(i, gui.params.angle_a, gui.params.angle_b, gui.params.spread, gui.params.num);
+                coord = phyllotaxisWrong(i, gui.params.angle, gui.params.spread, gui.params.num);
                 object.position.set(coord.x, coord.y, coord.z);
             break;
             default:

@@ -14,7 +14,6 @@ export default class Gui extends DAT.GUI{
             material: "standard",
             modus: "apple",
             angle: 137.5,
-            angle_b: 137.5,
             spread: 10,
             anim_spread: true,
             num: 742,
@@ -31,7 +30,6 @@ export default class Gui extends DAT.GUI{
         this.add(this.params, "material", ["standard", "wireframe", "phong","lambert"]).onChange(this._updateMaterialFolder());
         this.add(this.params, "modus", ["flat", "apple", "weird"]);
         this.add(this.params, "angle").min(132.0).max(138.0).step(0.01);
-        this.add(this.params, "angle_b").min(137.3).max(137.6).step(0.01);
         this.add(this.params, "spread").min(0).max(20).step(0.1).listen();
         this.add(this.params, "extrude_2Dflower");
         let anim = this.addFolder('animation');

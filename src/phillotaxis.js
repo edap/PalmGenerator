@@ -10,10 +10,10 @@ export function phyllotaxisSimple(i, angleInRadians, spread, extrude){
     return {x, y, z};
 }
 
-export function phyllotaxisApple(i, angle, angle_b, spread, tot){
+export function phyllotaxisApple(i, angle, spread, tot){
     let inc = Math.PI / tot;
     let current_angle = i * inc;
-    let current_angle_b= i * angle_b;
+    let current_angle_b= i * angle;
     let radius = spread * Math.sqrt(i);
     let x = radius * Math.sin(current_angle) * Math.cos(current_angle_b);
     let y = radius * Math.sin(current_angle) * Math.sin(current_angle_b);
@@ -26,11 +26,11 @@ export function phyllotaxisApple(i, angle, angle_b, spread, tot){
 // But sometimes there are strange patterns that generate a nice effect,
 // and I've decided to keep it
 // To use it, pass the angles in degrees
-export function phyllotaxisWrong(i, angle, angle_b, spread, tot){
+export function phyllotaxisWrong(i, angle, spread, tot){
     //let inc = Math.PI / tot;
     let inc = 180.0 / tot;
     let current_angle = i * inc;
-    let current_angle_b= i * angle_b;
+    let current_angle_b= i * angle;
     let radius = spread * Math.sqrt(i);
     let x = radius * Math.sin(current_angle) * Math.cos(current_angle_b);
     let y = radius * Math.sin(current_angle) * Math.sin(current_angle_b);
