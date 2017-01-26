@@ -59,19 +59,26 @@ window.addEventListener('resize', function() {
     camera.updateProjectionMatrix();
 });
 
-function populateFlower(selected_geometry, selected_material) {
+function populateFlower(selected_geometry, selected_second_geometry, selected_material) {
     let PItoDeg = (Math.PI/180.0);
     let angleInRadians = gui.params.angle * PItoDeg;
     for (var i = 0; i< gui.params.num; i++) {
+
+        let geometry;
+        if (i> gui.params.change_geometry_at ) {
+            geometry = selected_second_geometry;
+        } else {
+            geometry = selected_geometry;
+        }
+        let object = new THREE.Mesh(geometry, selected_material);
         let coord;
-        let object = new THREE.Mesh(selected_geometry, selected_material);
         switch(gui.params.modus){
             case "apple":
                 coord = phyllotaxisApple(i, angleInRadians, gui.params.spread, gui.params.num);
                 object.position.set(coord.x, coord.y, coord.z);
                 object.rotateZ( i* angleInRadians);
-                object.rotateY( (90 + gui.params.angle_y + i * 100/gui.params.num ) * -PItoDeg);
-                object.scale.set(gui.params.scale_x,1,1);
+                //object.rotateY( (90 + gui.params.angle_y + i * 100/gui.params.num ) * -PItoDeg);
+                object.scale.set(gui.params.scale_x,gui.params.scale_y,1);
             break;
             case "weird":
                 coord = phyllotaxisWrong(i, gui.params.angle, gui.params.spread, gui.params.num);
@@ -80,7 +87,15 @@ function populateFlower(selected_geometry, selected_material) {
             default:
                 coord = phyllotaxisSimple(i, angleInRadians, gui.params.spread, gui.params.extrude_2Dflower);
                 object.position.set(coord.x, coord.y, coord.z);
+
+                object.rotateZ( i* angleInRadians);
                 object.rotateY( (90 + gui.params.angle_y + i * 100/gui.params.num ) * -PItoDeg );
+                //object.rotateZ( gui.params.angle_x);
+                if (i <= gui.params.change_geometry_at) {
+                    let ratio = Math.abs(i/gui.params.change_geometry_at);
+                    let scaleRatio = ratio === 0 ? 1 : ratio;
+                    object.scale.set(gui.params.scale_x*(scaleRatio),gui.params.scale_y,1);
+                }
             break;
         }
         objects.push(object);
@@ -101,11 +116,11 @@ function resetFlower(){
 function render(){
     n_frames++;
     let spread;
-    if(gui.params.anim_spread){
+    if (gui.params.anim_spread) {
         gui.params.spread = Math.abs(Math.sin(n_frames/100) * gui.params.amplitude);
     }
-    populateFlower(geometries[gui.params.geometry],material);
-    if(gui.params.zoetrope){
+    populateFlower(geometries[gui.params.geometry], geometries[gui.params.second_geometry], material);
+    if (gui.params.zoetrope) {
         flower.rotateZ(gui.params.zoetrope_angle);
     }
     requestAnimationFrame(render);

@@ -12,6 +12,7 @@ export default class Gui extends DAT.GUI{
         this.material = material;
         this.params = {
             geometry: "sphere",
+            second_geometry: "box",
             modus: "apple",
             angle: 137.5,
             spread: 10,
@@ -22,8 +23,11 @@ export default class Gui extends DAT.GUI{
             zoetrope:true,
             zoetrope_angle:139.71,
             extrude_2Dflower: false,
+            change_geometry_at: 100,
             angle_y: 100,
+            angle_x: 100,
             scale_x: 4,
+            scale_y: 1,
             color: 0x000022,
             emissive: 0x28000,
             specular: 0x445566,
@@ -34,15 +38,19 @@ export default class Gui extends DAT.GUI{
         this.remember(this.params);
 
 
-        this.add(this.params, "num").min(1).max(1200).step(1);
+        this.add(this.params, "num").min(1).max(1200).step(1).listen();
         this.add(this.params, "geometry", ["sphere", "box", "lathe", "cone"]);
+        this.add(this.params, "second_geometry", ["sphere", "box", "lathe", "cone"]);
         //this.add(this.params, "material", ["standard", "wireframe", "phong","lambert"]).onChange(this._updateMaterialFolder());
         this.add(this.params, "modus", ["flat", "apple", "weird"]);
         this.add(this.params, "angle").min(132.0).max(138.0).step(0.01);
-        this.add(this.params, "spread").min(0).max(20).step(0.1).listen();
-        this.add(this.params, "extrude_2Dflower");
+        this.add(this.params, "spread").min(0).max(20).step(0.1);
         this.add(this.params, "angle_y").min(1).max(160);
-        this.add(this.params, "scale_x").min(1).max(8);
+        this.add(this.params, "angle_x").min(1).max(160);// questo angolo non l'hai ancora usato. Valuta.
+        this.add(this.params, "scale_x").min(1).max(20);
+        this.add(this.params, "scale_y").min(1).max(8);
+        this.add(this.params, "extrude_2Dflower");
+        this.add(this.params, "change_geometry_at").min(0).max(1200);
         let anim = this.addFolder('animation');
         anim.add(this.params, "anim_spread");
         anim.add(this.params, "zoetrope");
