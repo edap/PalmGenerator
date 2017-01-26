@@ -37,5 +37,3 @@ export function phyllotaxisWrong(i, angle, spread, tot){
     let z = radius * Math.cos(current_angle);
     return {x, y, z};
 }
-
-
