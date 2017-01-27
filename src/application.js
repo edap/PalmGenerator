@@ -6,7 +6,6 @@ import CollectionGeometries from './geometries.js';
 import CollectionMaterials from './materials.js';
 import {PointLights} from './pointLights.js';
 
-const goldenRatio = 13.508;
 const geometries = new CollectionGeometries;
 const materials = new CollectionMaterials;
 let material = materials["phong"];
@@ -22,19 +21,16 @@ document.body.appendChild(renderer.domElement);
 camera.position.z = 80;
 this.controls = new OrbitControls(camera, renderer.domElement);
 
-//scene
+//palm group
 var objects = [];
 var flower = new THREE.Group();
 let n_frames = 0;
 
-//lights
+//scene
 let ambientLight = new THREE.AmbientLight( 0xa2ac00 );
 scene.add( ambientLight );
-
 renderer.setClearColor( 0x57be92 );
 gui.addScene(scene, ambientLight, renderer);
-//gui.addMaterials(materials);
-
 PointLights().map((light) => {
     scene.add( light );
 });
@@ -64,7 +60,7 @@ function populateFlower(selected_geometry, selected_second_geometry, selected_ma
         }
         let object = new THREE.Mesh(geometry, selected_material);
         let coord;
-        coord = phyllotaxisSimple(i, angleInRadians, gui.params.spread, gui.params.extrude_2Dflower);
+        coord = phyllotaxisSimple(i, angleInRadians, gui.params.spread, true);
         object.position.set(coord.x, coord.y, coord.z);
 
         object.rotateZ( i* angleInRadians);

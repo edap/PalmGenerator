@@ -21,7 +21,6 @@ export default class Gui extends DAT.GUI{
             amplitude: 0.1,
             zoetrope:true,
             zoetrope_angle:139.71,
-            extrude_2Dflower: false,
             change_geometry_at: 100,
             angle_y: 100,
             angle_x: 100,
@@ -47,7 +46,6 @@ export default class Gui extends DAT.GUI{
         this.add(this.params, "angle_x").min(1).max(160);// questo angolo non l'hai ancora usato. Valuta.
         this.add(this.params, "scale_x").min(1).max(20);
         this.add(this.params, "scale_y").min(1).max(8);
-        this.add(this.params, "extrude_2Dflower");
         this.add(this.params, "change_geometry_at").min(0).max(1200);
         let anim = this.addFolder('animation');
         anim.add(this.params, "anim_spread");
