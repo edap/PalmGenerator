@@ -13,7 +13,7 @@ export default class Gui extends DAT.GUI{
         this.params = {
             spread: 10,
             num: 742,
-            change_geometry_at: 100,
+            foliage_start_at: 100,
             foliage_geometry: "sphere",
             trunk_geometry: "box",
             angle: 137.5,
@@ -46,7 +46,7 @@ export default class Gui extends DAT.GUI{
         this.add(this.params, "angle_x").min(1).max(160);// questo angolo non l'hai ancora usato. Valuta.
         this.add(this.params, "scale_x").min(1).max(20);
         this.add(this.params, "scale_y").min(1).max(8);
-        this.add(this.params, "change_geometry_at").min(0).max(1200);
+        this.add(this.params, "foliage_start_at").min(0).max(1200);
         let anim = this.addFolder('animation');
         anim.add(this.params, "anim_spread");
         anim.add(this.params, "zoetrope");

@@ -53,7 +53,7 @@ function populateFlower(foliage_geometry, trunk_geometry, selected_material) {
     for (var i = 0; i< gui.params.num; i++) {
 
         let geometry;
-        if (i> gui.params.change_geometry_at ) {
+        if (i> gui.params.foliage_start_at ) {
             geometry = foliage_geometry;
         } else {
             geometry = trunk_geometry;
@@ -66,8 +66,8 @@ function populateFlower(foliage_geometry, trunk_geometry, selected_material) {
         object.rotateZ( i* angleInRadians);
         object.rotateY( (90 + gui.params.angle_y + i * 100/gui.params.num ) * -PItoDeg );
         //object.rotateZ( gui.params.angle_x);
-        if (i <= gui.params.change_geometry_at) {
-            let ratio = Math.abs(i/gui.params.change_geometry_at);
+        if (i <= gui.params.foliage_start_at) {
+            let ratio = Math.abs(i/gui.params.foliage_start_at);
             //this is to avaoid a scaleRatio of 0, that would cause a warning
             let scaleRatio = ratio === 0 ? 0.01 : ratio;
             object.scale.set(gui.params.scale_x*(scaleRatio),gui.params.scale_y,1);
