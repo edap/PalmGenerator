@@ -45,7 +45,7 @@ window.addEventListener('resize', function() {
     camera.updateProjectionMatrix();
 });
 
-function transformIntoLeaf(object, iter, angleInRadians){
+function transformIntoLeaf(object, iter, angleInRadians, radius){
     let PItoDeg = (Math.PI/180.0);
     //the scale ratio is a value between 0.001 and 1.
     // It is 0.0001 for the first leaves, and 1 for the last ones
@@ -55,16 +55,16 @@ function transformIntoLeaf(object, iter, angleInRadians){
     let scaleRatio = ratio === 0 ? 0.001 : ratio;
 
     object.rotateZ( iter* angleInRadians);
-    object.rotateY( (90 + gui.params.angle_y + iter * 100/gui.params.num ) * -PItoDeg );
+    object.rotateY( (90 + gui.params.angle_y + iter * 200/gui.params.num ) * -PItoDeg );
     // as they grow up, they should be translate on its own x axis, otherwise
     // they make an intersections that looks weird
-    object.translateX(10 * gui.scale_x * scaleRatio);
+    object.translateX((gui.params.scale_x*radius) * scaleRatio);
     // leafs are smaller at the begginning and bigger as they grow up.
     object.scale.set(gui.params.scale_x * scaleRatio,gui.params.scale_y,1);
 
 }
 
-function populatePalm(foliage_geometry, trunk_geometry, selected_material) {
+function populatePalm(foliage_geometry, trunk_geometry, selected_material, radius) {
     let PItoDeg = (Math.PI/180.0);
     let angleInRadians = gui.params.angle * PItoDeg;
     for (var i = 0; i< gui.params.num; i++) {
@@ -74,8 +74,8 @@ function populatePalm(foliage_geometry, trunk_geometry, selected_material) {
         let coord = phyllotaxisConical(i, angleInRadians, gui.params.spread, gui.params.z_decrease);
         object.position.set(coord.x, coord.y, coord.z);
         if (isALeaf) {
-            transformIntoLeaf(object, i, angleInRadians);
-        }else{
+            transformIntoLeaf(object, i, angleInRadians, radius);
+        } else {
             object.rotateZ( i* angleInRadians);
             object.rotateY( (90 + gui.params.angle_y + i * 100/gui.params.num ) * -PItoDeg );
         }
@@ -104,7 +104,7 @@ function render(){
     populatePalm(
         geometries[gui.params.foliage_geometry],
         geometries[gui.params.trunk_geometry],
-        material);
+        material, radius);
     if (gui.params.zoetrope) {
         palm.rotateZ(gui.params.zoetrope_angle);
     }

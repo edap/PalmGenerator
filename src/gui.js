@@ -51,10 +51,10 @@ export default class Gui extends DAT.GUI{
 
         let foliage = this.addFolder('foliage');
         foliage.add(this.params, "foliage_geometry", ["sphere", "box", "lathe", "cone"]);
-        foliage.add(this.params, "angle_y").min(1).max(160);
+        foliage.add(this.params, "angle_y").min(-10).max(50);
         foliage.add(this.params, "bla").min(0).max(30).step(0.5);
         foliage.add(this.params, "angle_x").min(1).max(160);// questo angolo non l'hai ancora usato. Valuta.
-        foliage.add(this.params, "scale_x").min(1).max(20);
+        foliage.add(this.params, "scale_x").min(5).max(40);
         foliage.add(this.params, "scale_y").min(1).max(8);
 
         let mat = this.addFolder('Material');
