@@ -5,8 +5,8 @@ import {phyllotaxisConical} from './phillotaxis.js';
 import CollectionGeometries from './geometries.js';
 import CollectionMaterials from './materials.js';
 import {PointLights} from './pointLights.js';
-
-const geometries = new CollectionGeometries;
+const radius = 5; //this number is used to create the geometried and to position the Leafs correctly
+const geometries = new CollectionGeometries(radius);
 const materials = new CollectionMaterials;
 const material = materials["phong"];
 const gui = new Gui(material);
@@ -37,9 +37,6 @@ PointLights().map((light) => {
 });
 
 
-let axisHelper = new THREE.AxisHelper( 50 );
-//scene.add( axisHelper );
-
 window.addEventListener('resize', function() {
     let WIDTH = window.innerWidth,
     HEIGHT = window.innerHeight;
@@ -48,12 +45,23 @@ window.addEventListener('resize', function() {
     camera.updateProjectionMatrix();
 });
 
-function transformIntoLeaf(object, iter){
-    // leafs are smaller at the begginning and bigger as they grow up.
+function transformIntoLeaf(object, iter, angleInRadians){
+    let PItoDeg = (Math.PI/180.0);
+    //the scale ratio is a value between 0.001 and 1.
+    // It is 0.0001 for the first leaves, and 1 for the last ones
     let ratio = Math.abs(iter/gui.params.foliage_start_at);
-    //this is to avaoid a scaleRatio of 0, that would cause a warning
-    let scaleRatio = ratio === 0 ? 0.01 : ratio;
-    object.scale.set(gui.params.scale_x,gui.params.scale_y,1);
+    //this is to avaoid a scaleRatio of 0, that would cause a warning while scaling
+    // an object for 0
+    let scaleRatio = ratio === 0 ? 0.001 : ratio;
+
+    object.rotateZ( iter* angleInRadians);
+    object.rotateY( (90 + gui.params.angle_y + iter * 100/gui.params.num ) * -PItoDeg );
+    // as they grow up, they should be translate on its own x axis, otherwise
+    // they make an intersections that looks weird
+    object.translateX(10 * gui.scale_x * scaleRatio);
+    // leafs are smaller at the begginning and bigger as they grow up.
+    object.scale.set(gui.params.scale_x * scaleRatio,gui.params.scale_y,1);
+
 }
 
 function populatePalm(foliage_geometry, trunk_geometry, selected_material) {
@@ -61,16 +69,15 @@ function populatePalm(foliage_geometry, trunk_geometry, selected_material) {
     let angleInRadians = gui.params.angle * PItoDeg;
     for (var i = 0; i< gui.params.num; i++) {
         let isALeaf = (i <= gui.params.foliage_start_at)? true : false;
-        //let geometry = getCurrentGeometry(foliage_geometry, trunk_geometry, i);
         let geometry = isALeaf ? foliage_geometry : trunk_geometry;
         let object = new THREE.Mesh(geometry, selected_material);
-        let coord;
-        coord = phyllotaxisConical(i, angleInRadians, gui.params.spread, gui.params.z_decrease);
+        let coord = phyllotaxisConical(i, angleInRadians, gui.params.spread, gui.params.z_decrease);
         object.position.set(coord.x, coord.y, coord.z);
-        object.rotateZ( i* angleInRadians);
-        object.rotateY( (90 + gui.params.angle_y + i * 100/gui.params.num ) * -PItoDeg );
         if (isALeaf) {
-            transformIntoLeaf(object, i);
+            transformIntoLeaf(object, i, angleInRadians);
+        }else{
+            object.rotateZ( i* angleInRadians);
+            object.rotateY( (90 + gui.params.angle_y + i * 100/gui.params.num ) * -PItoDeg );
         }
         objects.push(object);
         palm.add(object);
@@ -91,8 +98,8 @@ function render(){
     n_frames++;
     let spread;
     if (gui.params.anim_spread) {
-        //gui.params.spread = Math.abs(Math.sin(n_frames/100) * gui.params.amplitude);
-        gui.params.num = Math.abs(Math.sin(n_frames/100) * gui.params.amplitude);
+        gui.params.spread = Math.abs(Math.sin(n_frames/100) * gui.params.amplitude);
+        //gui.params.num = Math.abs(Math.sin(n_frames/100) * gui.params.amplitude);
     }
     populatePalm(
         geometries[gui.params.foliage_geometry],

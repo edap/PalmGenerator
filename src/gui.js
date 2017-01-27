@@ -20,6 +20,7 @@ export default class Gui extends DAT.GUI{
             foliage_geometry: "sphere",
             angle_y: 100,
             angle_x: 100,
+            bla: 2,
             scale_x: 4,
             scale_y: 1,
             color: 0x000022,
@@ -41,7 +42,7 @@ export default class Gui extends DAT.GUI{
         this.remember(this.params);
 
 
-        this.add(this.params, "spread").min(0).max(20).step(0.1);
+        this.add(this.params, "spread").min(0).max(20).step(0.1).listen();
         this.add(this.params, "angle").min(132.0).max(138.0).step(0.01);
         this.add(this.params, "num").min(1).max(1200).step(1).listen();
         this.add(this.params, "z_decrease").min(0.04).max(0.50).step(0.01);
@@ -51,6 +52,7 @@ export default class Gui extends DAT.GUI{
         let foliage = this.addFolder('foliage');
         foliage.add(this.params, "foliage_geometry", ["sphere", "box", "lathe", "cone"]);
         foliage.add(this.params, "angle_y").min(1).max(160);
+        foliage.add(this.params, "bla").min(0).max(30).step(0.5);
         foliage.add(this.params, "angle_x").min(1).max(160);// questo angolo non l'hai ancora usato. Valuta.
         foliage.add(this.params, "scale_x").min(1).max(20);
         foliage.add(this.params, "scale_y").min(1).max(8);
