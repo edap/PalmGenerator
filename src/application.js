@@ -4,6 +4,7 @@ import Gui from './gui.js';
 import {phyllotaxisSimple, phyllotaxisApple, phyllotaxisWrong} from './phillotaxis.js';
 import CollectionGeometries from './geometries.js';
 import CollectionMaterials from './materials.js';
+import {PointLights} from './pointLights.js';
 
 const goldenRatio = 13.508;
 const geometries = new CollectionGeometries;
@@ -30,22 +31,13 @@ let n_frames = 0;
 let ambientLight = new THREE.AmbientLight( 0xa2ac00 );
 scene.add( ambientLight );
 
-renderer.setClearColor( 0x2f693c );
+renderer.setClearColor( 0x57be92 );
 gui.addScene(scene, ambientLight, renderer);
 //gui.addMaterials(materials);
 
-let lights = [];
-lights[ 0 ] = new THREE.PointLight( 0xffffff, 1, 0 );
-lights[ 1 ] = new THREE.PointLight( 0xffffff, 1, 0 );
-lights[ 2 ] = new THREE.PointLight( 0xffffff, 1, 0 );
-
-lights[ 0 ].position.set( 0, 200, 0 );
-lights[ 1 ].position.set( 100, 200, 100 );
-lights[ 2 ].position.set( - 100, - 200, - 100 );
-
-scene.add( lights[ 0 ] );
-scene.add( lights[ 1 ] );
-scene.add( lights[ 2 ] );
+PointLights().map((light) => {
+    scene.add( light );
+});
 
 
 var axisHelper = new THREE.AxisHelper( 50 );
@@ -72,31 +64,17 @@ function populateFlower(selected_geometry, selected_second_geometry, selected_ma
         }
         let object = new THREE.Mesh(geometry, selected_material);
         let coord;
-        switch(gui.params.modus){
-            case "apple":
-                coord = phyllotaxisApple(i, angleInRadians, gui.params.spread, gui.params.num);
-                object.position.set(coord.x, coord.y, coord.z);
-                object.rotateZ( i* angleInRadians);
-                //object.rotateY( (90 + gui.params.angle_y + i * 100/gui.params.num ) * -PItoDeg);
-                object.scale.set(gui.params.scale_x,gui.params.scale_y,1);
-            break;
-            case "weird":
-                coord = phyllotaxisWrong(i, gui.params.angle, gui.params.spread, gui.params.num);
-                object.position.set(coord.x, coord.y, coord.z);
-            break;
-            default:
-                coord = phyllotaxisSimple(i, angleInRadians, gui.params.spread, gui.params.extrude_2Dflower);
-                object.position.set(coord.x, coord.y, coord.z);
+        coord = phyllotaxisSimple(i, angleInRadians, gui.params.spread, gui.params.extrude_2Dflower);
+        object.position.set(coord.x, coord.y, coord.z);
 
-                object.rotateZ( i* angleInRadians);
-                object.rotateY( (90 + gui.params.angle_y + i * 100/gui.params.num ) * -PItoDeg );
-                //object.rotateZ( gui.params.angle_x);
-                if (i <= gui.params.change_geometry_at) {
-                    let ratio = Math.abs(i/gui.params.change_geometry_at);
-                    let scaleRatio = ratio === 0 ? 1 : ratio;
-                    object.scale.set(gui.params.scale_x*(scaleRatio),gui.params.scale_y,1);
-                }
-            break;
+        object.rotateZ( i* angleInRadians);
+        object.rotateY( (90 + gui.params.angle_y + i * 100/gui.params.num ) * -PItoDeg );
+        //object.rotateZ( gui.params.angle_x);
+        if (i <= gui.params.change_geometry_at) {
+            let ratio = Math.abs(i/gui.params.change_geometry_at);
+            //this is to avaoid a scaleRatio of 0, that would cause a warning
+            let scaleRatio = ratio === 0 ? 0.01 : ratio;
+            object.scale.set(gui.params.scale_x*(scaleRatio),gui.params.scale_y,1);
         }
         objects.push(object);
         flower.add(object);
@@ -117,7 +95,8 @@ function render(){
     n_frames++;
     let spread;
     if (gui.params.anim_spread) {
-        gui.params.spread = Math.abs(Math.sin(n_frames/100) * gui.params.amplitude);
+        //gui.params.spread = Math.abs(Math.sin(n_frames/100) * gui.params.amplitude);
+        gui.params.num = Math.abs(Math.sin(n_frames/100) * gui.params.amplitude);
     }
     populateFlower(geometries[gui.params.geometry], geometries[gui.params.second_geometry], material);
     if (gui.params.zoetrope) {
