@@ -10,6 +10,15 @@ export function phyllotaxisSimple(i, angleInRadians, spread, extrude){
     return {x, y, z};
 }
 
+export function phyllotaxisConical(i, angleInRadians, spread, extrude){
+    let current_angle = i * angleInRadians;
+    let radius = spread * Math.sqrt(i);
+    let x = radius * Math.cos(current_angle);
+    let y = radius * Math.sin(current_angle);
+    let z = i * - extrude;
+    return {x, y, z};
+}
+
 export function phyllotaxisApple(i, angle, spread, tot){
     let inc = Math.PI / tot;
     let current_angle = i * inc;

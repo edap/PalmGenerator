@@ -12,16 +12,12 @@ export default class Gui extends DAT.GUI{
         this.material = material;
         this.params = {
             spread: 10,
-            num: 742,
-            foliage_start_at: 100,
-            foliage_geometry: "sphere",
-            trunk_geometry: "box",
             angle: 137.5,
-            anim_spread: true,
-            zoetrope_rotation: 137.035,
-            amplitude: 0.1,
-            zoetrope:true,
-            zoetrope_angle:139.71,
+            num: 742,
+            z_decrease: 0.05,
+            foliage_start_at: 100,
+
+            foliage_geometry: "sphere",
             angle_y: 100,
             angle_x: 100,
             scale_x: 4,
@@ -30,35 +26,46 @@ export default class Gui extends DAT.GUI{
             emissive: 0x28000,
             specular: 0x445566,
             shininess: 50,
+
+            trunk_geometry: "box",
+
+            anim_spread: true,
+            zoetrope_rotation: 137.035,
+            amplitude: 0.1,
+            zoetrope:true,
+            zoetrope_angle:139.71,
+
             backgroundColor:"#57be92",
             ambientLight:"#cf9e00"
         };
         this.remember(this.params);
 
 
-        this.add(this.params, "num").min(1).max(1200).step(1).listen();
-        this.add(this.params, "foliage_geometry", ["sphere", "box", "lathe", "cone"]);
-        this.add(this.params, "trunk_geometry", ["sphere", "box", "lathe", "cone"]);
-        //this.add(this.params, "material", ["standard", "wireframe", "phong","lambert"]).onChange(this._updateMaterialFolder());
-        this.add(this.params, "angle").min(132.0).max(138.0).step(0.01);
         this.add(this.params, "spread").min(0).max(20).step(0.1);
-        this.add(this.params, "angle_y").min(1).max(160);
-        this.add(this.params, "angle_x").min(1).max(160);// questo angolo non l'hai ancora usato. Valuta.
-        this.add(this.params, "scale_x").min(1).max(20);
-        this.add(this.params, "scale_y").min(1).max(8);
+        this.add(this.params, "angle").min(132.0).max(138.0).step(0.01);
+        this.add(this.params, "num").min(1).max(1200).step(1).listen();
+        this.add(this.params, "z_decrease").min(0.04).max(0.50).step(0.01);
         this.add(this.params, "foliage_start_at").min(0).max(1200);
-        let anim = this.addFolder('animation');
-        anim.add(this.params, "anim_spread");
-        anim.add(this.params, "zoetrope");
-        anim.add(this.params, "zoetrope_angle").min(130).max(150).step(0.01);
-        anim.add(this.params, "amplitude").min(0).max(1200).step(0.01);
-        let mat = this.addFolder('Material');
+        this.add(this.params, "trunk_geometry", ["sphere", "box", "lathe", "cone"]);
 
+        let foliage = this.addFolder('foliage');
+        foliage.add(this.params, "foliage_geometry", ["sphere", "box", "lathe", "cone"]);
+        foliage.add(this.params, "angle_y").min(1).max(160);
+        foliage.add(this.params, "angle_x").min(1).max(160);// questo angolo non l'hai ancora usato. Valuta.
+        foliage.add(this.params, "scale_x").min(1).max(20);
+        foliage.add(this.params, "scale_y").min(1).max(8);
+
+        let mat = this.addFolder('Material');
         mat.addColor(this.params, 'color' ).onChange( this._handleColorChange( this.material.color ) );
         mat.addColor(this.params, 'emissive' ).onChange( this._handleColorChange( this.material.emissive ) );
         mat.addColor(this.params, 'specular' ).onChange( this._handleColorChange( this.material.specular ) );
         mat.add(this.params, 'shininess', 0, 100).onChange( (val)=>{this.material.shininess = val;});
 
+        let anim = this.addFolder('animation');
+        anim.add(this.params, "anim_spread");
+        anim.add(this.params, "zoetrope");
+        anim.add(this.params, "zoetrope_angle").min(130).max(150).step(0.01);
+        anim.add(this.params, "amplitude").min(0).max(1200).step(0.01);
     }
 
     // credtis to these methods goes to Greg Tatum https://threejs.org/docs/scenes/js/material.js
