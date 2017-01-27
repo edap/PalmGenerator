@@ -58,7 +58,7 @@ function transformIntoLeaf(object, iter, angleInRadians, radius){
     object.rotateY( (90 + gui.params.angle_y + iter * 200/gui.params.num ) * -PItoDeg );
     // as they grow up, they should be translate on its own x axis, otherwise
     // they make an intersections that looks weird
-    object.translateX((gui.params.scale_x*radius) * scaleRatio);
+    object.translateX(gui.params.scale_x*(radius-0.2) * scaleRatio);
     // leafs are smaller at the begginning and bigger as they grow up.
     object.scale.set(gui.params.scale_x * scaleRatio,gui.params.scale_y,1);
 

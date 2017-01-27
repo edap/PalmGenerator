@@ -13,7 +13,7 @@ export default class Gui extends DAT.GUI{
         this.params = {
             spread: 10,
             angle: 137.5,
-            num: 742,
+            num: 1200,
             z_decrease: 0.05,
             foliage_start_at: 100,
 
@@ -44,18 +44,17 @@ export default class Gui extends DAT.GUI{
 
         this.add(this.params, "spread").min(0).max(20).step(0.1).listen();
         this.add(this.params, "angle").min(132.0).max(138.0).step(0.01);
-        this.add(this.params, "num").min(1).max(1200).step(1).listen();
+        //this.add(this.params, "num").min(60).max(1200).step(1).listen();
         this.add(this.params, "z_decrease").min(0.04).max(0.50).step(0.01);
-        this.add(this.params, "foliage_start_at").min(0).max(1200);
+        this.add(this.params, "foliage_start_at").min(30).max(600);
         this.add(this.params, "trunk_geometry", ["sphere", "box", "lathe", "cone"]);
 
         let foliage = this.addFolder('foliage');
         foliage.add(this.params, "foliage_geometry", ["sphere", "box", "lathe", "cone"]);
-        foliage.add(this.params, "angle_y").min(-10).max(50);
-        foliage.add(this.params, "bla").min(0).max(30).step(0.5);
+        foliage.add(this.params, "angle_y").min(-50).max(30);
         foliage.add(this.params, "angle_x").min(1).max(160);// questo angolo non l'hai ancora usato. Valuta.
-        foliage.add(this.params, "scale_x").min(5).max(40);
-        foliage.add(this.params, "scale_y").min(1).max(8);
+        foliage.add(this.params, "scale_x").min(5).max(20);
+        foliage.add(this.params, "scale_y").min(0.1).max(4);
 
         let mat = this.addFolder('Material');
         mat.addColor(this.params, 'color' ).onChange( this._handleColorChange( this.material.color ) );
