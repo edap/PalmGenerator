@@ -48,36 +48,28 @@ window.addEventListener('resize', function() {
     camera.updateProjectionMatrix();
 });
 
-let getCurrentGeometry = (foliage_geometry, trunk_geometry, iter) => {
-    let geometry;
-    if (iter> gui.params.foliage_start_at ) {
-        geometry = foliage_geometry;
-    } else {
-        geometry = trunk_geometry;
-    }
-    return geometry;
-};
-
 function transformIntoLeaf(object, iter){
+    // leafs are smaller at the begginning and bigger as they grow up.
     let ratio = Math.abs(iter/gui.params.foliage_start_at);
     //this is to avaoid a scaleRatio of 0, that would cause a warning
     let scaleRatio = ratio === 0 ? 0.01 : ratio;
-    object.scale.set(gui.params.scale_x*(scaleRatio),gui.params.scale_y,1);
+    object.scale.set(gui.params.scale_x,gui.params.scale_y,1);
 }
 
 function populatePalm(foliage_geometry, trunk_geometry, selected_material) {
     let PItoDeg = (Math.PI/180.0);
     let angleInRadians = gui.params.angle * PItoDeg;
     for (var i = 0; i< gui.params.num; i++) {
-        let geometry = getCurrentGeometry(foliage_geometry, trunk_geometry, i);
+        let isALeaf = (i <= gui.params.foliage_start_at)? true : false;
+        //let geometry = getCurrentGeometry(foliage_geometry, trunk_geometry, i);
+        let geometry = isALeaf ? foliage_geometry : trunk_geometry;
         let object = new THREE.Mesh(geometry, selected_material);
         let coord;
         coord = phyllotaxisConical(i, angleInRadians, gui.params.spread, gui.params.z_decrease);
         object.position.set(coord.x, coord.y, coord.z);
         object.rotateZ( i* angleInRadians);
         object.rotateY( (90 + gui.params.angle_y + i * 100/gui.params.num ) * -PItoDeg );
-        //object.rotateZ( gui.params.angle_x);
-        if (i <= gui.params.foliage_start_at) {
+        if (isALeaf) {
             transformIntoLeaf(object, i);
         }
         objects.push(object);
