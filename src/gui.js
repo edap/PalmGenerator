@@ -11,17 +11,17 @@ export default class Gui extends DAT.GUI{
         );
         this.material = material;
         this.params = {
-            geometry: "sphere",
-            second_geometry: "box",
-            angle: 137.5,
             spread: 10,
-            anim_spread: true,
             num: 742,
+            change_geometry_at: 100,
+            foliage_geometry: "sphere",
+            trunk_geometry: "box",
+            angle: 137.5,
+            anim_spread: true,
             zoetrope_rotation: 137.035,
             amplitude: 0.1,
             zoetrope:true,
             zoetrope_angle:139.71,
-            change_geometry_at: 100,
             angle_y: 100,
             angle_x: 100,
             scale_x: 4,
@@ -37,8 +37,8 @@ export default class Gui extends DAT.GUI{
 
 
         this.add(this.params, "num").min(1).max(1200).step(1).listen();
-        this.add(this.params, "geometry", ["sphere", "box", "lathe", "cone"]);
-        this.add(this.params, "second_geometry", ["sphere", "box", "lathe", "cone"]);
+        this.add(this.params, "foliage_geometry", ["sphere", "box", "lathe", "cone"]);
+        this.add(this.params, "trunk_geometry", ["sphere", "box", "lathe", "cone"]);
         //this.add(this.params, "material", ["standard", "wireframe", "phong","lambert"]).onChange(this._updateMaterialFolder());
         this.add(this.params, "angle").min(132.0).max(138.0).step(0.01);
         this.add(this.params, "spread").min(0).max(20).step(0.1);

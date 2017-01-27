@@ -47,16 +47,16 @@ window.addEventListener('resize', function() {
     camera.updateProjectionMatrix();
 });
 
-function populateFlower(selected_geometry, selected_second_geometry, selected_material) {
+function populateFlower(foliage_geometry, trunk_geometry, selected_material) {
     let PItoDeg = (Math.PI/180.0);
     let angleInRadians = gui.params.angle * PItoDeg;
     for (var i = 0; i< gui.params.num; i++) {
 
         let geometry;
         if (i> gui.params.change_geometry_at ) {
-            geometry = selected_second_geometry;
+            geometry = foliage_geometry;
         } else {
-            geometry = selected_geometry;
+            geometry = trunk_geometry;
         }
         let object = new THREE.Mesh(geometry, selected_material);
         let coord;
@@ -94,7 +94,10 @@ function render(){
         //gui.params.spread = Math.abs(Math.sin(n_frames/100) * gui.params.amplitude);
         gui.params.num = Math.abs(Math.sin(n_frames/100) * gui.params.amplitude);
     }
-    populateFlower(geometries[gui.params.geometry], geometries[gui.params.second_geometry], material);
+    populateFlower(
+        geometries[gui.params.foliage_geometry],
+        geometries[gui.params.trunk_geometry],
+        material);
     if (gui.params.zoetrope) {
         flower.rotateZ(gui.params.zoetrope_angle);
     }
