@@ -23,7 +23,7 @@ this.controls = new OrbitControls(camera, renderer.domElement);
 
 //palm group
 var objects = [];
-var flower = new THREE.Group();
+var palm = new THREE.Group();
 let n_frames = 0;
 
 //scene
@@ -47,17 +47,21 @@ window.addEventListener('resize', function() {
     camera.updateProjectionMatrix();
 });
 
-function populateFlower(foliage_geometry, trunk_geometry, selected_material) {
+let getCurrentGeometry = (foliage_geometry, trunk_geometry, iter) => {
+    let geometry;
+    if (iter> gui.params.foliage_start_at ) {
+        geometry = foliage_geometry;
+    } else {
+        geometry = trunk_geometry;
+    }
+    return geometry;
+};
+
+function populatePalm(foliage_geometry, trunk_geometry, selected_material) {
     let PItoDeg = (Math.PI/180.0);
     let angleInRadians = gui.params.angle * PItoDeg;
     for (var i = 0; i< gui.params.num; i++) {
-
-        let geometry;
-        if (i> gui.params.foliage_start_at ) {
-            geometry = foliage_geometry;
-        } else {
-            geometry = trunk_geometry;
-        }
+        let geometry = getCurrentGeometry(foliage_geometry, trunk_geometry, i);
         let object = new THREE.Mesh(geometry, selected_material);
         let coord;
         coord = phyllotaxisSimple(i, angleInRadians, gui.params.spread, true);
@@ -73,17 +77,17 @@ function populateFlower(foliage_geometry, trunk_geometry, selected_material) {
             object.scale.set(gui.params.scale_x*(scaleRatio),gui.params.scale_y,1);
         }
         objects.push(object);
-        flower.add(object);
+        palm.add(object);
     }
-    scene.add(flower);
+    scene.add(palm);
 }
 
-function resetFlower(){
+function resetPalm(){
     for(var index in objects){
         let object = objects[index];
-			  flower.remove( object );
+			  palm.remove( object );
     }
-    scene.remove(flower);
+    scene.remove(palm);
     objects = [];
 }
 
@@ -94,16 +98,16 @@ function render(){
         //gui.params.spread = Math.abs(Math.sin(n_frames/100) * gui.params.amplitude);
         gui.params.num = Math.abs(Math.sin(n_frames/100) * gui.params.amplitude);
     }
-    populateFlower(
+    populatePalm(
         geometries[gui.params.foliage_geometry],
         geometries[gui.params.trunk_geometry],
         material);
     if (gui.params.zoetrope) {
-        flower.rotateZ(gui.params.zoetrope_angle);
+        palm.rotateZ(gui.params.zoetrope_angle);
     }
     requestAnimationFrame(render);
     renderer.render(scene, camera);
-    resetFlower();
+    resetPalm();
 }
 
 render();
