@@ -56,7 +56,8 @@ function transformIntoLeaf(object, iter, angleInRadians, radius, scaleAsItGrows)
     object.rotateZ( iter* angleInRadians);
     let yrot = (iter/gui.params.angle_y) * gui.params.foliage_start_at;
     //object.rotateY( (yrot ) * -PItoDeg );
-    object.rotateY( (90 + gui.params.angle_y + iter * 200/gui.params.num ) * -PItoDeg );
+    let y_angle = scaleAsItGrows ?(gui.params.angle_y * scaleRatio) : gui.params.angle_y ;
+    object.rotateY( (gui.params.starting_angle_y + y_angle + iter * 200/gui.params.num ) * -PItoDeg );
 
     // as they grow up, they should be translate on its own x axis, otherwise
     // with certains geometries, like spheres, they make an intersections that looks weird
