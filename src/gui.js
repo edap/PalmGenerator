@@ -32,6 +32,7 @@ export default class Gui extends DAT.GUI{
             trunk_geometry: "box",
 
             anim_spread: false,
+            anim_decrease_objects: false,
             zoetrope_rotation: 137.035,
             amplitude: 0.1,
             zoetrope:false,
@@ -66,6 +67,7 @@ export default class Gui extends DAT.GUI{
 
         let anim = this.addFolder('animation');
         anim.add(this.params, "anim_spread");
+        anim.add(this.params, "anim_decrease_objects");
         anim.add(this.params, "zoetrope");
         anim.add(this.params, "zoetrope_angle").min(130).max(150).step(0.01);
         anim.add(this.params, "amplitude").min(0).max(1200).step(0.01);

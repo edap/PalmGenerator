@@ -107,7 +107,9 @@ function render(){
     let spread;
     if (gui.params.anim_spread) {
         gui.params.spread = Math.abs(Math.sin(n_frames/100) * gui.params.amplitude);
-        //gui.params.num = Math.abs(Math.sin(n_frames/100) * gui.params.amplitude);
+    }
+    if (gui.params.anim_decrease_objects) {
+        gui.params.num = Math.abs(Math.sin(n_frames/200) * gui.params.amplitude);
     }
     populatePalm(
         geometries[gui.params.foliage_geometry],

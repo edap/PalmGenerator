@@ -9,6 +9,7 @@ export default class CollectionGeometries{
 	          lathePoints.push( new THREE.Vector2( Math.sin( i * 0.2 ) * 5 + 5, ( i - 5 ) * 2 ) );
         }
         // leaf parameters default
+
         // length=20,
         // length_stem=4,
         // width_stem=2,
