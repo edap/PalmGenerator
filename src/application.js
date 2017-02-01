@@ -61,12 +61,13 @@ function transformIntoLeaf(object, iter, angleInRadians, radius, scaleAsItGrows)
     // as they grow up, they should be translate on its own x axis, otherwise
     // with certains geometries, like spheres, they make an intersections that looks weird
     if (scaleAsItGrows) {
-        object.translateX(gui.params.scale_x * scaleRatio * (radius -0.2) );
+        //object.translateX(gui.params.scale_x * scaleRatio * (radius -0.2) );
         object.scale.set(gui.params.scale_x * scaleRatio ,gui.params.scale_y,1);
     }else{
-        object.translateX(gui.params.scale_x* radius );
+        //object.translateX(gui.params.scale_x* radius );
         object.scale.set(gui.params.scale_x ,gui.params.scale_y,1);
     }
+    object.rotateZ(-(Math.PI/2));
 
 }
 
