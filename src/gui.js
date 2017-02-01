@@ -15,13 +15,14 @@ export default class Gui extends DAT.GUI{
             angle: 137.5,
             num: 1200,
             z_decrease: 0.05,
-            foliage_start_at: 100,
+            foliage_start_at: 30,
 
-            foliage_geometry: "sphere",
+            foliage_geometry: "leaf",
             angle_y: 29,
             bla: 2,
             scale_x: 5,
             scale_y: 1,
+            scale_as_grows:true,
             color: 0x000022,
             emissive: 0x28000,
             specular: 0x445566,
@@ -49,10 +50,11 @@ export default class Gui extends DAT.GUI{
         this.add(this.params, "trunk_geometry", ["sphere", "box", "lathe", "cone"]);
 
         let foliage = this.addFolder('foliage');
-        foliage.add(this.params, "foliage_geometry", ["sphere", "box", "lathe", "cone"]);
+        foliage.add(this.params, "foliage_geometry", ["sphere", "box", "lathe", "cone", "leaf"]);
         foliage.add(this.params, "angle_y").min(0).max(80);
         foliage.add(this.params, "scale_x").min(5).max(17);
         foliage.add(this.params, "scale_y").min(0.1).max(1.3);
+        foliage.add(this.params, "scale_as_grows");
 
         let mat = this.addFolder('Material');
         mat.addColor(this.params, 'color' ).onChange( this._handleColorChange( this.material.color ) );
