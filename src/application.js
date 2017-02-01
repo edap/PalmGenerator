@@ -1,5 +1,6 @@
 /* eslint-env browser */
 import * as THREE from 'three';
+import Stats from 'stats.js';
 import Gui from './gui.js';
 import {phyllotaxisConical} from './phillotaxis.js';
 import CollectionGeometries from './geometries.js';
@@ -19,6 +20,10 @@ const renderer = new THREE.WebGLRenderer({antialias:true});
 renderer.setSize(window.innerWidth, window.innerHeight);
 document.body.style.margin =0;
 document.body.appendChild(renderer.domElement);
+
+const stats = new Stats();
+stats.showPanel( 0 ); // 0: fps, 1: ms, 2: mb, 3+: custom
+document.body.appendChild( stats.dom );
 camera.position.z = 80;
 this.controls = new OrbitControls(camera, renderer.domElement);
 
@@ -103,6 +108,8 @@ function resetPalm(){
 }
 
 function render(){
+    stats.begin();
+
     n_frames++;
     let spread;
     if (gui.params.anim_spread) {
@@ -118,9 +125,11 @@ function render(){
     if (gui.params.zoetrope) {
         palm.rotateZ(gui.params.zoetrope_angle);
     }
-    requestAnimationFrame(render);
     renderer.render(scene, camera);
     resetPalm();
+
+    stats.end();
+    requestAnimationFrame(render);
 }
 
 render();
