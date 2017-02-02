@@ -51,7 +51,7 @@ window.addEventListener('resize', function() {
     camera.updateProjectionMatrix();
 });
 
-function transformIntoLeaf(object, iter, angleInRadians, radius, scaleAsItGrows){
+function transformIntoLeaf(object, iter, angleInRadians, radius){
     let PItoDeg = (Math.PI/180.0);
     //the scale ratio is a value between 0.001 and 1.
     // It is 0.0001 for the first leaves, and 1 for the last ones
@@ -62,18 +62,11 @@ function transformIntoLeaf(object, iter, angleInRadians, radius, scaleAsItGrows)
     object.rotateZ( iter* angleInRadians);
     let yrot = (iter/gui.params.angle_y) * gui.params.foliage_start_at;
     //object.rotateY( (yrot ) * -PItoDeg );
-    let y_angle = scaleAsItGrows ?(gui.params.angle_y * scaleRatio) : gui.params.angle_y ;
+    let y_angle = gui.params.angle_y * scaleRatio;
     object.rotateY( (gui.params.starting_angle_y + y_angle + iter * 200/gui.params.num ) * -PItoDeg );
 
-    // as they grow up, they should be translate on its own x axis, otherwise
-    // with certains geometries, like spheres, they make an intersections that looks weird
-    if (scaleAsItGrows) {
-        //object.translateX(gui.params.scale_x * scaleRatio * (radius -0.2) );
-        object.scale.set(gui.params.scale_x * scaleRatio ,gui.params.scale_y,1);
-    }else{
-        //object.translateX(gui.params.scale_x* radius );
-        object.scale.set(gui.params.scale_x ,gui.params.scale_y,1);
-    }
+    // as they grow up, they become bigger 
+    object.scale.set(5 * scaleRatio ,1 ,1);
     object.rotateZ(-(Math.PI/2));
 
 }
@@ -88,7 +81,7 @@ function populatePalm(foliage_geometry, trunk_geometry, selected_material, radiu
         let coord = phyllotaxisConical(i, angleInRadians, gui.params.spread, gui.params.z_decrease);
         object.position.set(coord.x, coord.y, coord.z);
         if (isALeaf) {
-            transformIntoLeaf(object, i, angleInRadians, radius, gui.params.scale_as_grows);
+            transformIntoLeaf(object, i, angleInRadians, radius);
         } else {
             object.rotateZ( i* angleInRadians);
             object.rotateY( (90 + gui.params.angle_y + i * 100/gui.params.num ) * -PItoDeg );
@@ -114,10 +107,12 @@ function render(){
     n_frames++;
     let spread;
     if (gui.params.anim_spread) {
-        gui.params.spread = Math.abs(Math.sin(n_frames/100) * gui.params.amplitude);
+        let amp_spread = 13;
+        gui.params.spread = Math.abs(Math.sin(n_frames/100) * amp_spread);
     }
     if (gui.params.anim_decrease_objects) {
-        gui.params.num = Math.abs(Math.sin(n_frames/200) * gui.params.amplitude);
+        let amp_decrease = 1200;
+        gui.params.num = Math.abs(Math.sin(n_frames/200) * amp_decrease);
     }
     populatePalm(
         new LeafGeometry(gui.params.length,
