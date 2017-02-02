@@ -17,7 +17,6 @@ export default class Gui extends DAT.GUI{
             z_decrease: 0.05,
             foliage_start_at: 30,
 
-            foliage_geometry: "leaf",
             starting_angle_y: 60,
             angle_y: 29,
             bla: 2,
@@ -33,7 +32,7 @@ export default class Gui extends DAT.GUI{
             length_stem:4,
             width_stem:0.5,
             leaf_width:0.5,
-            density:10,
+            density:30,
             curvature: 0.03,
             curvature_border: 0.005,
             leaf_inclination: 0.2,
@@ -58,10 +57,9 @@ export default class Gui extends DAT.GUI{
         //this.add(this.params, "num").min(60).max(1200).step(1).listen();
         this.add(this.params, "z_decrease").min(0.04).max(0.25).step(0.01);
         this.add(this.params, "foliage_start_at").min(30).max(320);
-        this.add(this.params, "trunk_geometry", ["sphere", "box", "lathe", "cone"]);
+        this.add(this.params, "trunk_geometry", ["sphere", "box"]);
 
         let foliage = this.addFolder('foliage');
-        foliage.add(this.params, "foliage_geometry", ["sphere", "box", "lathe", "cone", "leaf"]);
         foliage.add(this.params, "angle_y").min(0).max(80);
         foliage.add(this.params, "starting_angle_y").min(60).max(100);
         foliage.add(this.params, "scale_x").min(5).max(17);

@@ -24,10 +24,7 @@ export default class CollectionGeometries{
         let geometries = {
             "sphere": new THREE.SphereGeometry(radius, widthSegments, heightSegments),
             "box": new THREE.BoxGeometry( radius, radius, radius, 4, 4, 4 ),
-            "lathe": new THREE.LatheBufferGeometry( lathePoints ),
-            //"leaf" : new LeafGeometry(20, 0, 5, 0.5, 3),
-            "leaf" : new LeafGeometry(60, 4, 0.3, 0.6, 75, 0.02, 0.002, 1),
-            "cone": new THREE.ConeGeometry(radius, 20, 32)
+            "leaf" : new LeafGeometry(60, 4, 0.3, 0.6, 75, 0.02, 0.002, 1)
         };
         return geometries;
     }
