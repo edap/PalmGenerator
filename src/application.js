@@ -1,5 +1,6 @@
 /* eslint-env browser */
 import * as THREE from 'three';
+import LeafGeometry from './leafGeometry.js';
 import Stats from 'stats.js';
 import Gui from './gui.js';
 import {phyllotaxisConical} from './phillotaxis.js';
@@ -119,7 +120,15 @@ function render(){
         gui.params.num = Math.abs(Math.sin(n_frames/200) * gui.params.amplitude);
     }
     populatePalm(
-        geometries[gui.params.foliage_geometry],
+        new LeafGeometry(gui.params.length,
+                         gui.params.length_stem,
+                         gui.params.width_stem,
+                         gui.params.leaf_width,
+                         gui.params.density,
+                         gui.params.curvature,
+                         gui.params.curvature_border,
+                         gui.params.leaf_inclination),
+        //geometries[gui.params.foliage_geometry],
         geometries[gui.params.trunk_geometry],
         material, radius);
     if (gui.params.zoetrope) {

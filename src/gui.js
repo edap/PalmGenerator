@@ -29,6 +29,15 @@ export default class Gui extends DAT.GUI{
             specular: 0x445566,
             shininess: 50,
 
+            length:50,
+            length_stem:4,
+            width_stem:0.5,
+            leaf_width:0.5,
+            density:10,
+            curvature: 0.03,
+            curvature_border: 0.005,
+            leaf_inclination: 0.2,
+
             trunk_geometry: "box",
 
             anim_spread: false,
@@ -54,10 +63,20 @@ export default class Gui extends DAT.GUI{
         let foliage = this.addFolder('foliage');
         foliage.add(this.params, "foliage_geometry", ["sphere", "box", "lathe", "cone", "leaf"]);
         foliage.add(this.params, "angle_y").min(0).max(80);
-        foliage.add(this.params, "starting_angle_y").min(0).max(100);
+        foliage.add(this.params, "starting_angle_y").min(60).max(100);
         foliage.add(this.params, "scale_x").min(5).max(17);
         foliage.add(this.params, "scale_y").min(0.1).max(1.3);
         foliage.add(this.params, "scale_as_grows");
+
+        let leaf = this.addFolder('leaf');
+        leaf.add(this.params, "length").min(20).max(90).step(1);
+        leaf.add(this.params, "length_stem").min(1).max(10).step(1);
+        leaf.add(this.params, "width_stem").min(0.2).max(2.4).step(0.1);
+        leaf.add(this.params, "leaf_width").min(0.1).max(0.9).step(0.1);
+        leaf.add(this.params, "density").min(15).max(80).step(1);
+        leaf.add(this.params, "curvature").min(0.01).max(0.04).step(0.01);
+        leaf.add(this.params, "curvature_border").min(0.001).max(0.008).step(0.001);
+        leaf.add(this.params, "leaf_inclination").min(0.1).max(1.0).step(0.1);
 
         let mat = this.addFolder('Material');
         mat.addColor(this.params, 'color' ).onChange( this._handleColorChange( this.material.color ) );
