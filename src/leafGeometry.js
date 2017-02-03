@@ -77,7 +77,8 @@ export default class LeafGeometry{
             key_last_vertex += 4;
             //11
             //leaf dx, looking from the beginning of the stem in direction end of the leaf
-            let z_foglia = (current_z + (space_between_leaves*3) * leaf_inclination);
+            let inclined_z = (current_z + (leaf_z_space*4) * leaf_inclination);
+            let z_foglia = (inclined_z >= length) ? length: inclined_z;
             x = this._getVauleOnParabola(curvature_border, z_foglia, z_zero, x_zero );
             vertices.push(new Vector3(
                 (-width_stem/2 + (x * -1)),
