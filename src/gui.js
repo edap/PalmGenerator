@@ -34,7 +34,6 @@ export default class Gui extends DAT.GUI{
             curvature_border: 0.005,
             leaf_inclination: 0.2,
 
-            trunk_geometry: "box",
 
             anim_spread: false,
             anim_decrease_objects: false,
@@ -53,7 +52,6 @@ export default class Gui extends DAT.GUI{
         //this.add(this.params, "num").min(60).max(1200).step(1).listen();
         this.add(this.params, "z_decrease").min(0.04).max(0.25).step(0.01);
         this.add(this.params, "foliage_start_at").min(10).max(320);
-        this.add(this.params, "trunk_geometry", ["sphere", "box"]);
 
         let foliage = this.addFolder('foliage');
         foliage.add(this.params, "angle_y").min(0).max(80);

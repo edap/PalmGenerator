@@ -124,7 +124,7 @@ function render(){
                          gui.params.curvature_border,
                          gui.params.leaf_inclination),
         //geometries[gui.params.foliage_geometry],
-        geometries[gui.params.trunk_geometry],
+        geometries["box"],
         material, radius);
     if (gui.params.zoetrope) {
         palm.rotateZ(gui.params.zoetrope_angle);
