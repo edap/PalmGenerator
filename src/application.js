@@ -65,7 +65,7 @@ function transformIntoLeaf(object, iter, angleInRadians, radius){
     let y_angle = gui.params.angle_y * scaleRatio;
     object.rotateY( (gui.params.starting_angle_y + y_angle + iter * 200/gui.params.num ) * -PItoDeg );
 
-    // as they grow up, they become bigger 
+    // as they grow up, they become bigger
     object.scale.set(5 * scaleRatio ,1 ,1);
     object.rotateZ(-(Math.PI/2));
 
@@ -111,7 +111,7 @@ function render(){
         gui.params.spread = Math.abs(Math.sin(n_frames/100) * amp_spread);
     }
     if (gui.params.anim_decrease_objects) {
-        let amp_decrease = 1200;
+        let amp_decrease = 900;
         gui.params.num = Math.abs(Math.sin(n_frames/200) * amp_decrease);
     }
     populatePalm(

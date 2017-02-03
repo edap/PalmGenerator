@@ -13,7 +13,7 @@ export default class Gui extends DAT.GUI{
         this.params = {
             spread: 0.2,
             angle: 137.5,
-            num: 1200,
+            num: 1000,
             z_decrease: 0.05,
             foliage_start_at: 30,
 
