@@ -61,7 +61,7 @@ export default class Gui extends DAT.GUI{
         leaf.add(this.params, "length").min(20).max(90).step(1);
         leaf.add(this.params, "length_stem").min(2).max(40).step(1);
         leaf.add(this.params, "width_stem").min(0.2).max(2.4).step(0.1);
-        leaf.add(this.params, "leaf_width").min(0.1).max(0.9).step(0.1);
+        leaf.add(this.params, "leaf_width").min(0.1).max(1.0).step(0.1);
         leaf.add(this.params, "density").min(15).max(180).step(1);
         leaf.add(this.params, "curvature").min(0.01).max(0.06).step(0.01);
         leaf.add(this.params, "curvature_border").min(0.001).max(0.01).step(0.001);
@@ -96,12 +96,12 @@ export default class Gui extends DAT.GUI{
 	      } );
 
 	      folder.addColor( this.params, "ambientLight" ).onChange( this._handleColorChange( ambientLight.color ) );
-	      this.guiSceneFog( folder, scene );
+	      //this.guiSceneFog( folder, scene );
     }
 
     guiSceneFog ( folder, scene ) {
 	      let fogFolder = folder.addFolder('scene.fog');
-	      let fog = new Fog( 0x3f7b9d, 0, 60 );
+	      let fog = new Fog( 0x3f7b9d, 0.9, 20 );
 	      let data = {
 		        fog : {
 			          "THREE.Fog()" : false,

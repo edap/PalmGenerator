@@ -15,7 +15,7 @@ export default class LeafGeometry{
         let curvature = positive_curvature * -1.0;
         let curvature_border = positive_curvature_border * -1.0;
         let min_length_stem = (length_stem <= 0) ? 0.1 : length_stem;
-        let n_discard_leaf = 1; //number of leaf skipped at the end
+        let n_discard_leaf = 4; //number of leaf skipped at the end
         let available_length = length - min_length_stem;
         let leaf_z_space = available_length/density; //length that each leaf occupies on the z axis, padding included
         let y = 0;
