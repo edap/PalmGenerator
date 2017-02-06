@@ -6,6 +6,7 @@ export default class LeafGeometry{
                 length_stem=4,
                 width_stem=2,
                 leaf_width=0.5,
+                leaf_up=1,
                 density=2,
                 positive_curvature= 0.05,
                 positive_curvature_border= 0.05,
@@ -82,7 +83,7 @@ export default class LeafGeometry{
             x = this._getVauleOnParabola(curvature_border, z_foglia, z_zero, x_zero );
             vertices.push(new Vector3(
                 (-width_stem/2 + (x * -1)),
-                this._getVauleOnParabola(curvature, z_foglia, z_zero, y_zero ),
+                this._getVauleOnParabola(curvature, z_foglia, z_zero, y_zero ) + leaf_up,
                 z_foglia));
             faces.push(new Face3(key_last_vertex-7, key_last_vertex+1, key_last_vertex-3));
             faces.push(new Face3(key_last_vertex+1, key_last_vertex-7, key_last_vertex-5));
@@ -95,7 +96,7 @@ export default class LeafGeometry{
             x = this._getVauleOnParabola(curvature_border, z_foglia, z_zero, x_zero );
             vertices.push(new Vector3(
                 (width_stem/2 + x),
-                this._getVauleOnParabola(curvature, z_foglia, z_zero, y_zero ),
+                this._getVauleOnParabola(curvature, z_foglia, z_zero, y_zero ) + leaf_up,
                 z_foglia));
 
             faces.push(new Face3(key_last_vertex-7, key_last_vertex-3, key_last_vertex+1));

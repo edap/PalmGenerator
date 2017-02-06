@@ -29,6 +29,7 @@ export default class Gui extends DAT.GUI{
             length_stem:4,
             width_stem:0.5,
             leaf_width:0.5,
+            leaf_up:1.5,
             density:30,
             curvature: 0.03,
             curvature_border: 0.005,
@@ -62,6 +63,7 @@ export default class Gui extends DAT.GUI{
         leaf.add(this.params, "length_stem").min(2).max(40).step(1);
         leaf.add(this.params, "width_stem").min(0.2).max(2.4).step(0.1);
         leaf.add(this.params, "leaf_width").min(0.1).max(1.0).step(0.1);
+        leaf.add(this.params, "leaf_up").min(0.1).max(6.0).step(0.1);
         leaf.add(this.params, "density").min(15).max(180).step(1);
         leaf.add(this.params, "curvature").min(0.01).max(0.06).step(0.01);
         leaf.add(this.params, "curvature_border").min(0.001).max(0.01).step(0.001);

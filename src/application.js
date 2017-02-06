@@ -4,6 +4,7 @@ import LeafGeometry from './leafGeometry.js';
 import Stats from 'stats.js';
 import Gui from './gui.js';
 import {phyllotaxisConical} from './phillotaxis.js';
+import {fragmentShader, vertexShader} from './shaders.js';
 import CollectionGeometries from './geometries.js';
 import CollectionMaterials from './materials.js';
 import {PointLights} from './pointLights.js';
@@ -13,43 +14,88 @@ const materials = new CollectionMaterials;
 const material = materials["phong"];
 const gui = new Gui(material);
 
-//setup the scene and the camera
+const stats = new Stats();
 const scene = new THREE.Scene();
 const OrbitControls = require('three-orbit-controls')(THREE);
 const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
 const renderer = new THREE.WebGLRenderer({antialias:true});
-renderer.setSize(window.innerWidth, window.innerHeight);
-document.body.style.margin =0;
-document.body.appendChild(renderer.domElement);
 
-const stats = new Stats();
-stats.showPanel( 0 ); // 0: fps, 1: ms, 2: mb, 3+: custom
-document.body.appendChild( stats.dom );
-camera.position.z = 80;
-this.controls = new OrbitControls(camera, renderer.domElement);
-
-//palm group
 var objects = [];
 var palm = new THREE.Group();
 let n_frames = 0;
 
-//add lights to the scene
-let ambientLight = new THREE.AmbientLight( 0xa2ac00 );
-scene.add( ambientLight );
-renderer.setClearColor( 0x57be92 );
-gui.addScene(scene, ambientLight, renderer);
-PointLights().map((light) => {
-    scene.add( light );
-});
+
+function init(){
+    //setup the scene and the camera
+
+    renderer.setSize(window.innerWidth, window.innerHeight);
+    document.body.style.margin =0;
+    document.body.appendChild(renderer.domElement);
+
+    stats.showPanel( 0 ); // 0: fps, 1: ms, 2: mb, 3+: custom
+    document.body.appendChild( stats.dom );
+    camera.position.z = 80;
+    let controls = new OrbitControls(camera, renderer.domElement);
+
+    //palm group
+
+    //add lights to the scene
+    let ambientLight = new THREE.AmbientLight( 0xa2ac00 );
+    scene.add( ambientLight );
+    renderer.setClearColor( 0x57be92 );
+    gui.addScene(scene, ambientLight, renderer);
+    PointLights().map((light) => {
+        scene.add( light );
+    });
+    let mat = getMaterial();
 
 
-window.addEventListener('resize', function() {
-    let WIDTH = window.innerWidth,
-    HEIGHT = window.innerHeight;
-    renderer.setSize(WIDTH, HEIGHT);
-    camera.aspect = WIDTH / HEIGHT;
-    camera.updateProjectionMatrix();
-});
+    window.addEventListener('resize', function() {
+        let WIDTH = window.innerWidth,
+        HEIGHT = window.innerHeight;
+        renderer.setSize(WIDTH, HEIGHT);
+        camera.aspect = WIDTH / HEIGHT;
+        camera.updateProjectionMatrix();
+    });
+    let palm = populatePalm(
+        new LeafGeometry(gui.params.length,
+                         gui.params.length_stem,
+                         gui.params.width_stem,
+                         gui.params.leaf_width,
+                         gui.params.leaf_up,
+                         gui.params.density,
+                         gui.params.curvature,
+                         gui.params.curvature_border,
+                         gui.params.leaf_inclination),
+        //geometries[gui.params.foliage_geometry],
+        geometries["box"],
+        //material, radius);
+        mat, radius);
+
+    scene.add(palm);
+}
+
+function getMaterial(){
+    let screenResolution = new THREE.Vector2(window.innerWidth, window.innerHeight);
+    let tmp_uniforms = {
+		    time: { value: 1.0 },
+        color: {type: "c", value: new THREE.Color( gui.params.color )},
+		    uResolution: { value: screenResolution }
+	  };
+    console.log(vertexShader());
+    let material = new THREE.ShaderMaterial( {
+	      uniforms: THREE.UniformsUtils.merge([
+            THREE.UniformsLib['lights'],
+            tmp_uniforms
+        ]),
+        lights:true,
+	      vertexShader: vertexShader(),
+	      fragmentShader: fragmentShader()
+
+    } );
+    console.log(material.vertexShader);
+    return material;
+}
 
 function transformIntoLeaf(object, iter, angleInRadians, radius){
     let PItoDeg = (Math.PI/180.0);
@@ -89,51 +135,15 @@ function populatePalm(foliage_geometry, trunk_geometry, selected_material, radiu
         objects.push(object);
         palm.add(object);
     }
-    scene.add(palm);
+    return palm;
 }
 
-function resetPalm(){
-    for(var index in objects){
-        let object = objects[index];
-			  palm.remove( object );
-    }
-    scene.remove(palm);
-    objects = [];
-}
 
 function render(){
     stats.begin();
-
-    n_frames++;
-    let spread;
-    if (gui.params.anim_spread) {
-        let amp_spread = 13;
-        gui.params.spread = Math.abs(Math.sin(n_frames/100) * amp_spread);
-    }
-    if (gui.params.anim_decrease_objects) {
-        let amp_decrease = 900;
-        gui.params.num = Math.abs(Math.sin(n_frames/200) * amp_decrease);
-    }
-    populatePalm(
-        new LeafGeometry(gui.params.length,
-                         gui.params.length_stem,
-                         gui.params.width_stem,
-                         gui.params.leaf_width,
-                         gui.params.density,
-                         gui.params.curvature,
-                         gui.params.curvature_border,
-                         gui.params.leaf_inclination),
-        //geometries[gui.params.foliage_geometry],
-        geometries["box"],
-        material, radius);
-    if (gui.params.zoetrope) {
-        palm.rotateZ(gui.params.zoetrope_angle);
-    }
     renderer.render(scene, camera);
-    resetPalm();
-
     stats.end();
     requestAnimationFrame(render);
 }
-
+init();
 render();
