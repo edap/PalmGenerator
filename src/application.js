@@ -57,7 +57,7 @@ function init(){
         camera.aspect = WIDTH / HEIGHT;
         camera.updateProjectionMatrix();
     });
-    let palm = populatePalm(
+    let objs = populatePalm(
         new LeafGeometry(gui.params.length,
                          gui.params.length_stem,
                          gui.params.width_stem,
@@ -72,7 +72,15 @@ function init(){
         //material, radius);
         mat, radius);
 
-    scene.add(palm);
+    //scene.add(palm);
+
+    var geometry = new THREE.Geometry();
+    for (let i = 0; i < objs.length; i++){
+        let mesh = objs[i];
+        mesh.updateMatrix();
+        geometry.merge(mesh.geometry, mesh.matrix);
+    }
+    scene.add(new THREE.Mesh(geometry, mat));
 }
 
 function getMaterial(){
@@ -88,7 +96,7 @@ function getMaterial(){
             THREE.UniformsLib['lights'],
             tmp_uniforms
         ]),
-        lights:true,
+        lights: true,
 	      vertexShader: vertexShader(),
 	      fragmentShader: fragmentShader()
 
@@ -118,6 +126,7 @@ function transformIntoLeaf(object, iter, angleInRadians, radius){
 }
 
 function populatePalm(foliage_geometry, trunk_geometry, selected_material, radius) {
+    let objs = [];
     let PItoDeg = (Math.PI/180.0);
     let angleInRadians = gui.params.angle * PItoDeg;
     for (var i = 0; i< gui.params.num; i++) {
@@ -132,10 +141,10 @@ function populatePalm(foliage_geometry, trunk_geometry, selected_material, radiu
             object.rotateZ( i* angleInRadians);
             object.rotateY( (90 + gui.params.angle_y + i * 100/gui.params.num ) * -PItoDeg );
         }
-        objects.push(object);
-        palm.add(object);
+        objs.push(object);
+        //palm.add(object);
     }
-    return palm;
+    return objs;
 }
 
 
