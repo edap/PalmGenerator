@@ -77,6 +77,7 @@ function init(){
     var geometry = new THREE.Geometry();
     for (let i = 0; i < objs.length; i++){
         let mesh = objs[i];
+        console.log(mesh.angle);
         mesh.updateMatrix();
         geometry.merge(mesh.geometry, mesh.matrix);
     }
@@ -133,6 +134,7 @@ function populatePalm(foliage_geometry, trunk_geometry, selected_material, radiu
         let isALeaf = (i <= gui.params.foliage_start_at)? true : false;
         let geometry = isALeaf ? foliage_geometry : trunk_geometry;
         let object = new THREE.Mesh(geometry, selected_material);
+        object.angle = angleInRadians * i;
         let coord = phyllotaxisConical(i, angleInRadians, gui.params.spread, gui.params.z_decrease);
         object.position.set(coord.x, coord.y, coord.z);
         if (isALeaf) {
