@@ -1,15 +1,18 @@
 export function vertexShader(){
     let vs =
         "precision mediump float;\n"+
+
+        "attribute float angle;\n"+
+        "varying float fAngle;\n"+
         "varying vec3 vecNormal;\n"+
         "varying vec4 vecPos;\n"+
-        "varying float screenY;\n"+
         "uniform vec2 uResolution;\n"+
         "void main() {\n"+
         "vecNormal = normalMatrix * normal;\n"+
         // as the light later will be given in world coordinate space,
         // vPos has to be in world coordinate space too
         "vecPos = projectionMatrix * modelViewMatrix * vec4(position, 1.0);\n"+
+        "fAngle = angle;\n"+
         "gl_Position = vecPos;\n"+
         "}";
     return vs;
@@ -20,6 +23,7 @@ export function fragmentShader(){
         "precision mediump float;\n"+
         // Comment this line to do not use the point light
         "varying vec3 vecNormal;\n"+
+        "varying float fAngle;\n"+
         "varying vec4 vecPos;\n"+
         "uniform vec3 color;\n"+
         "uniform vec2 uResolution;\n"+

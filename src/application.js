@@ -75,21 +75,38 @@ function init(){
 
     //scene.add(palm);
 
-    let buffers = createBuffers(leafGeom, geometries["box"], gui.params.n, gui.params.foliage_start_at);
+    let hash_vertex_info = getTotNumVertices(leafGeom, geometries["box"], gui.params.num, gui.params.foliage_start_at);
+    let buffers = createBuffers(hash_vertex_info.tot_vertices);
     var geometry = new THREE.Geometry();
     for (let i = 0; i < objs.length; i++){
+        //buffers
+        if (i <= gui.params.foliage_start_at) {
+            //fullfill color
+            for(let pos=(i*hash_vertex_info.n_vertices_leaf); pos < ((i+1) * hash_vertex_info.n_vertices_leaf); pos++){
+                buffers.angleBuffer[pos] = objs[i].angle;
+                buffers.isLeafBuffer[pos] = 1.0;
+            }
+        } else {
+            for(let pos=(i*hash_vertex_info.n_vertices_trunk); pos < ((i+1) * hash_vertex_info.n_vertices_trunk); pos++){
+                buffers.angleBuffer[pos] = objs[i].angle;
+                buffers.isLeafBuffer[pos] = 0.0;
+            }
+        }
+        //
         let mesh = objs[i];
         mesh.updateMatrix();
         geometry.merge(mesh.geometry, mesh.matrix);
     }
-    scene.add(new THREE.Mesh(geometry, mat));
+    let bufGeometry = new THREE.BufferGeometry().fromGeometry(geometry);
+    bufGeometry.addAttribute( 'angle', new THREE.BufferAttribute( buffers.angleBuffer, 1 ) );
+    bufGeometry.addAttribute( 'isLeaf', new THREE.BufferAttribute( buffers.isLeafBuffer, 1 ) );
+    scene.add(new THREE.Mesh(bufGeometry, mat));
 }
 
-function createBuffers(foliage_geometry, trunk_geometry, tot_objects, foliage_start_at){
-    let n_vert = getTotNumVertices(foliage_geometry, trunk_geometry, tot_objects, foliage_start_at);
+function createBuffers(n_vert){
     return {
-        anglesBuffer: new Float32Array(n_vert),
-        geometryTypeBuffer: new Float32Array(n_vert)
+        angleBuffer: new Float32Array(n_vert),
+        isLeafBuffer: new Float32Array(n_vert)
     };
 }
 
@@ -138,9 +155,15 @@ function transformIntoLeaf(object, iter, angleInRadians, radius){
 }
 
 function getTotNumVertices(foliage_geometry, trunk_geometry, tot_objects, foliage_start_at){
-    let n_vertices_in_leafs = foliage_start_at * foliage_geometry.vertices.count;
-    let n_vertices_in_stam = (tot_objects - foliage_start_at) * trunk_geometry.vertices.count;
-    return n_vertices_in_stam + n_vertices_in_leafs;
+    let n_vertices_in_leaf = foliage_geometry.vertices.length;
+    let n_vertices_in_trunk = trunk_geometry.vertices.length;
+    let n_vertices_in_leafs = foliage_start_at * n_vertices_in_leaf;
+    let n_vertices_in_stam = (tot_objects - foliage_start_at) * n_vertices_in_trunk;
+    return{
+        tot_vertices: (n_vertices_in_stam + n_vertices_in_leafs),
+        n_vertices_leaf: n_vertices_in_leaf,
+        n_vertices_trunk: n_vertices_in_trunk
+    };
 }
 
 function populatePalm(foliage_geometry, trunk_geometry, selected_material, radius) {
