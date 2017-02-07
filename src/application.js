@@ -57,16 +57,17 @@ function init(){
         camera.aspect = WIDTH / HEIGHT;
         camera.updateProjectionMatrix();
     });
+    let leafGeom = new LeafGeometry(gui.params.length,
+                                    gui.params.length_stem,
+                                    gui.params.width_stem,
+                                    gui.params.leaf_width,
+                                    gui.params.leaf_up,
+                                    gui.params.density,
+                                    gui.params.curvature,
+                                    gui.params.curvature_border,
+                                    gui.params.leaf_inclination);
     let objs = populatePalm(
-        new LeafGeometry(gui.params.length,
-                         gui.params.length_stem,
-                         gui.params.width_stem,
-                         gui.params.leaf_width,
-                         gui.params.leaf_up,
-                         gui.params.density,
-                         gui.params.curvature,
-                         gui.params.curvature_border,
-                         gui.params.leaf_inclination),
+        leafGeom,
         //geometries[gui.params.foliage_geometry],
         geometries["box"],
         //material, radius);
@@ -74,14 +75,22 @@ function init(){
 
     //scene.add(palm);
 
+    let buffers = createBuffers(leafGeom, geometries["box"], gui.params.n, gui.params.foliage_start_at);
     var geometry = new THREE.Geometry();
     for (let i = 0; i < objs.length; i++){
         let mesh = objs[i];
-        console.log(mesh.angle);
         mesh.updateMatrix();
         geometry.merge(mesh.geometry, mesh.matrix);
     }
     scene.add(new THREE.Mesh(geometry, mat));
+}
+
+function createBuffers(foliage_geometry, trunk_geometry, tot_objects, foliage_start_at){
+    let n_vert = getTotNumVertices(foliage_geometry, trunk_geometry, tot_objects, foliage_start_at);
+    return {
+        anglesBuffer: new Float32Array(n_vert),
+        geometryTypeBuffer: new Float32Array(n_vert)
+    };
 }
 
 
@@ -126,6 +135,12 @@ function transformIntoLeaf(object, iter, angleInRadians, radius){
     object.scale.set(5 * scaleRatio ,1 ,1);
     object.rotateZ(-(Math.PI/2));
 
+}
+
+function getTotNumVertices(foliage_geometry, trunk_geometry, tot_objects, foliage_start_at){
+    let n_vertices_in_leafs = foliage_start_at * foliage_geometry.vertices.count;
+    let n_vertices_in_stam = (tot_objects - foliage_start_at) * trunk_geometry.vertices.count;
+    return n_vertices_in_stam + n_vertices_in_leafs;
 }
 
 function populatePalm(foliage_geometry, trunk_geometry, selected_material, radius) {
