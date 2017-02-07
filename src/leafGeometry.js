@@ -1,4 +1,4 @@
-import {Vector3, Face3, Geometry} from 'three';
+import {Vector3, Vector2, Face3, Geometry} from 'three';
 
 export default class LeafGeometry{
     constructor(
@@ -137,8 +137,36 @@ export default class LeafGeometry{
         geom.vertices = vertices;
         geom.faces = faces;
         geom.computeFaceNormals();
+        this.assignUVs(geom);
         return geom;
     }
+
+    assignUVs(geometry) {
+
+        geometry.faceVertexUvs[0] = [];
+
+        geometry.faces.forEach(function(face) {
+
+            var components = ['x', 'y', 'z'].sort(function(a, b) {
+                return Math.abs(face.normal[a]) > Math.abs(face.normal[b]);
+            });
+
+            var v1 = geometry.vertices[face.a];
+            var v2 = geometry.vertices[face.b];
+            var v3 = geometry.vertices[face.c];
+
+            geometry.faceVertexUvs[0].push([
+                new Vector2(v1[components[0]], v1[components[1]]),
+                new Vector2(v2[components[0]], v2[components[1]]),
+                new Vector2(v3[components[0]], v3[components[1]])
+            ]);
+
+        });
+
+        geometry.uvsNeedUpdate = true;
+    }
+
+
 
     _getVauleOnParabola(curvature, z, z_zero, y_zero){
         let y = curvature * ((z - z_zero)*(z - z_zero)) + y_zero;
