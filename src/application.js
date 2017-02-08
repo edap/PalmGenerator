@@ -97,7 +97,10 @@ function init(){
         mesh.updateMatrix();
         geometry.merge(mesh.geometry, mesh.matrix);
     }
+
     let bufGeometry = new THREE.BufferGeometry().fromGeometry(geometry);
+    console.log(bufGeometry.attributes.position.count);
+    console.log(hash_vertex_info.tot_vertices);
     bufGeometry.addAttribute( 'angle', new THREE.BufferAttribute( buffers.angleBuffer, 1 ) );
     bufGeometry.addAttribute( 'isLeaf', new THREE.BufferAttribute( buffers.isLeafBuffer, 1 ) );
     scene.add(new THREE.Mesh(bufGeometry, mat));
@@ -155,8 +158,8 @@ function transformIntoLeaf(object, iter, angleInRadians, radius){
 }
 
 function getTotNumVertices(foliage_geometry, trunk_geometry, tot_objects, foliage_start_at){
-    let n_vertices_in_leaf = foliage_geometry.vertices.length;
-    let n_vertices_in_trunk = trunk_geometry.vertices.length;
+    let n_vertices_in_leaf = foliage_geometry.vertices.length * 3;
+    let n_vertices_in_trunk = trunk_geometry.vertices.length * 3;
     let n_vertices_in_leafs = foliage_start_at * n_vertices_in_leaf;
     let n_vertices_in_stam = (tot_objects - foliage_start_at) * n_vertices_in_trunk;
     return{
