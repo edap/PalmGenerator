@@ -2,18 +2,18 @@ import {phyllotaxisConical} from './phillotaxis.js';
 import * as THREE from 'THREE';
 
 export default class PalmGenerator{
-    constructor(leaf_geometry, trunk_geometry,general_options={}){
-        let cleaned_general_options =
-            this.merge_and_validate_general(general_options, this.default_general_options());
+    constructor(leaf_geometry, trunk_geometry, options={}){
+        let cleaned_options =
+            this.merge_and_validate_options(options, this.default_options());
 
         let objects = this.buildPalm(leaf_geometry,
                                      trunk_geometry,
-                                     cleaned_general_options);
+                                     cleaned_options);
         let geometry = this.mergeObjectsInOneGeometry(objects);
         return geometry;
     }
 
-    default_general_options(){
+    default_options(){
         return {
             spread: 0.2,
             angle: 137.5,
@@ -25,13 +25,7 @@ export default class PalmGenerator{
         };
     }
 
-    merge_and_validate_foliage(options, defaults){
-        //TODO implement validations
-        let opt = Object.assign(defaults, options);
-        return opt;
-    }
-
-    merge_and_validate_general(options, defaults){
+    merge_and_validate_options(options, defaults){
         //TODO implement validations
         let opt = Object.assign(defaults, options);
         return opt;
@@ -121,7 +115,6 @@ export default class PalmGenerator{
         };
     }
 
-
     getTotNumVertices(foliage_geometry, trunk_geometry, tot_objects, foliage_start_at){
         let adjusted_foliage_start_at = foliage_start_at + 1; //counting the 0 too
         let vertices_in_leaf = foliage_geometry.vertices.length * 3;
@@ -134,6 +127,4 @@ export default class PalmGenerator{
             n_vertices_trunk: n_vertices_in_trunk
         };
     }
-
-
 }
