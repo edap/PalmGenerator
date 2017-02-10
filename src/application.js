@@ -68,10 +68,9 @@ function init(){
                                     gui.params.curvature_border,
                                     gui.params.leaf_inclination);
 
-    let p = new PalmGenerator({length:30},leafGeom, geometries["box"],mat, radius);
+    let p = new PalmGenerator({length:30}, {}, mat);
     let objs = populatePalm(
         leafGeom,
-
         //leafGeom,
         //geometries["box"],
         //geometries[gui.params.foliage_geometry],

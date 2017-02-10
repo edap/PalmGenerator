@@ -23,7 +23,7 @@ export default class CollectionGeometries{
         let heightSegments = 32;
         let geometries = {
             "sphere": new THREE.SphereGeometry(radius, widthSegments, heightSegments),
-            "box": new THREE.BoxGeometry( radius, radius, radius, 4, 4, 4 ),
+            "box": new THREE.BoxGeometry( radius, radius, radius),
             "leaf" : new LeafGeometry(60, 4, 0.3, 0.6, 75, 0.02, 0.002, 1)
         };
         return geometries;

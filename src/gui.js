@@ -16,9 +16,9 @@ export default class Gui extends DAT.GUI{
             num: 500,
             z_decrease: 0.05,
             foliage_start_at: 50,
-
             starting_angle_y: 50,
             angle_y: 29,
+
             bla: 2,
             color: 0x000022,
             emissive: 0x28000,
