@@ -137,6 +137,7 @@ export default class LeafGeometry{
         geom.vertices = vertices;
         geom.faces = faces;
         geom.computeFaceNormals();
+        geom.computeTangents();
         this.assignUVs(geom);
         return geom;
     }
