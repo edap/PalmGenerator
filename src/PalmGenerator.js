@@ -1,31 +1,14 @@
-import LeafGeometry from './leafGeometry.js';
 import {phyllotaxisConical} from './phillotaxis.js';
 import * as THREE from 'THREE';
 
 export default class PalmGenerator{
-    constructor(foliage_options, general_options){
-        let cleaned_leaf_geometry_options =
-            this.merge_and_validate_foliage(foliage_options, this.default_foliage_options());
+    constructor(leaf_geometry, foliage_options, general_options){
         let cleaned_general_options =
             this.merge_and_validate_general(general_options, this.default_general_options());
 
-        let objects = this.buildPalm(cleaned_leaf_geometry_options, cleaned_general_options);
+        let objects = this.buildPalm(leaf_geometry, cleaned_general_options);
         let geometry = this.mergeObjectsInOneGeometry(objects);
         return geometry;
-    }
-
-    default_foliage_options(){
-        return {
-            length:20,
-            length_stem:1,
-            width_stem:0.7,
-            leaf_width:0.5,
-            leaf_up:1,
-            density:21,
-            curvature: 0.05,
-            curvature_border: 0.05,
-            leaf_inclination: 0.7
-        };
     }
 
     default_general_options(){
@@ -52,12 +35,12 @@ export default class PalmGenerator{
         return opt;
     }
 
-    buildPalm(leaf_geometry_options, general_options){
+    buildPalm(leaf_geometry, general_options){
         let material = new THREE.MeshBasicMaterial();
         let radius = 5;
-        let leafGeometry = new LeafGeometry(leaf_geometry_options);//here you could have passed any type of geometry, anyway, with the leafGeometry it looks like a palm
         let trunkGeometry = new THREE.BoxGeometry( radius, radius, radius);
-        let objects = this.populatePalm(leafGeometry, trunkGeometry, general_options, material);
+        let objects = this.populatePalm(leaf_geometry, trunkGeometry, general_options, material);
+        console.log(objects.length);
         return objects;
     }
 
@@ -73,7 +56,6 @@ export default class PalmGenerator{
             let coord = phyllotaxisConical(i, angleInRadians, options.spread, options.z_decrease);
             object.position.set(coord.x, coord.y, coord.z);
             if (isALeaf) {
-                //console.log(options);
                 this.transformIntoLeaf(object, i, angleInRadians, options);
             } else {
                 object.rotateZ( i* angleInRadians);
@@ -104,7 +86,8 @@ export default class PalmGenerator{
     }
 
     mergeObjectsInOneGeometry(objects){
-        // BUFFER_FEATURE
+        // BUFFER_FEATURE/ If this feature will be imprlemented, the buffer generator will returns an hash containing:
+        // 1)a geometry 2)buffer for the colors, 3)buffer for the isLeaf
         //let hash_vertex_info = getTotNumVertices(foliage_geometry, trunk_geometry, tot, foliage_start_at);
         //let buffers = createBuffers(hash_vertex_info.tot_vertices);
         let geometry = new THREE.Geometry();

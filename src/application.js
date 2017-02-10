@@ -62,7 +62,8 @@ function init(){
                curvature:gui.params.curvature,
                curvature_border:gui.params.curvature_border,
                leaf_inclination:gui.params.leaf_inclination};
-    let geometry = new PalmGenerator(opt, {});
+    let leafGeometry = new LeafGeometry(opt);
+    let geometry = new PalmGenerator(leafGeometry, {});
     let bufGeometry = new THREE.BufferGeometry().fromGeometry(geometry);
     scene.add(new THREE.Mesh(bufGeometry, mat));
 }
