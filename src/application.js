@@ -6,12 +6,12 @@ import Stats from 'stats.js';
 import Gui from './gui.js';
 import {phyllotaxisConical} from './phillotaxis.js';
 import {fragmentShader, vertexShader} from './shaders.js';
-import CollectionGeometries from './geometries.js';
 import CollectionMaterials from './materials.js';
 import {PointLights} from './pointLights.js';
-const geometries = new CollectionGeometries(radius);
+
 const materials = new CollectionMaterials;
-const material = materials["phong"];
+//let material = getMaterial();
+let material = materials["phong"];
 const gui = new Gui(material);
 
 const stats = new Stats();
@@ -51,7 +51,6 @@ function init(){
         camera.updateProjectionMatrix();
     });
 
-    let mat = getMaterial();
     let opt = {length: gui.params.length,
                length_stem: gui.params.length_stem,
                width_stem:gui.params.width_stem,
@@ -66,7 +65,7 @@ function init(){
     let leafGeometry = new LeafGeometry(opt);
     let geometry = new PalmGenerator(leafGeometry, trunkGeometry, {});
     let bufGeometry = new THREE.BufferGeometry().fromGeometry(geometry);
-    scene.add(new THREE.Mesh(bufGeometry, mat));
+    scene.add(new THREE.Mesh(bufGeometry, material));
 }
 
 function getMaterial(){
@@ -76,7 +75,7 @@ function getMaterial(){
         color: {type: "c", value: new THREE.Color( gui.params.color )},
 		    uResolution: { value: screenResolution }
 	  };
-    console.log(vertexShader());
+    //console.log(vertexShader());
     let material = new THREE.ShaderMaterial( {
 	      uniforms: THREE.UniformsUtils.merge([
             THREE.UniformsLib['lights'],
@@ -87,7 +86,7 @@ function getMaterial(){
 	      fragmentShader: fragmentShader()
 
     } );
-    console.log(material.vertexShader);
+    //console.log(material.vertexShader);
     return material;
 }
 
