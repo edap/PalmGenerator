@@ -9,7 +9,6 @@ import {fragmentShader, vertexShader} from './shaders.js';
 import CollectionGeometries from './geometries.js';
 import CollectionMaterials from './materials.js';
 import {PointLights} from './pointLights.js';
-const radius = 5; //this number is used to create the geometried and to position the Leafs correctly
 const geometries = new CollectionGeometries(radius);
 const materials = new CollectionMaterials;
 const material = materials["phong"];
@@ -62,8 +61,10 @@ function init(){
                curvature:gui.params.curvature,
                curvature_border:gui.params.curvature_border,
                leaf_inclination:gui.params.leaf_inclination};
+
+    let trunkGeometry = new THREE.BoxGeometry(5,5,5);
     let leafGeometry = new LeafGeometry(opt);
-    let geometry = new PalmGenerator(leafGeometry, {});
+    let geometry = new PalmGenerator(leafGeometry, trunkGeometry, {});
     let bufGeometry = new THREE.BufferGeometry().fromGeometry(geometry);
     scene.add(new THREE.Mesh(bufGeometry, mat));
 }

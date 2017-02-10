@@ -2,11 +2,13 @@ import {phyllotaxisConical} from './phillotaxis.js';
 import * as THREE from 'THREE';
 
 export default class PalmGenerator{
-    constructor(leaf_geometry, foliage_options, general_options){
+    constructor(leaf_geometry, trunk_geometry,general_options={}){
         let cleaned_general_options =
             this.merge_and_validate_general(general_options, this.default_general_options());
 
-        let objects = this.buildPalm(leaf_geometry, cleaned_general_options);
+        let objects = this.buildPalm(leaf_geometry,
+                                     trunk_geometry,
+                                     cleaned_general_options);
         let geometry = this.mergeObjectsInOneGeometry(objects);
         return geometry;
     }
@@ -35,23 +37,20 @@ export default class PalmGenerator{
         return opt;
     }
 
-    buildPalm(leaf_geometry, general_options){
+    buildPalm(leaf_geometry, trunk_geometry, general_options){
         let material = new THREE.MeshBasicMaterial();
-        let radius = 5;
-        let trunkGeometry = new THREE.BoxGeometry( radius, radius, radius);
-        let objects = this.populatePalm(leaf_geometry, trunkGeometry, general_options, material);
-        console.log(objects.length);
+        let objects = this.populatePalm(leaf_geometry, trunk_geometry, general_options, material);
         return objects;
     }
 
-    populatePalm(foliage_geometry, trunk_geometry, options, selected_material) {
+    populatePalm(foliage_geometry, trunk_geometry, options, material) {
         let objs = [];
         let PItoDeg = (Math.PI/180.0);
         let angleInRadians = options.angle * PItoDeg;
         for (var i = 0; i< options.num; i++) {
             let isALeaf = (i <= options.foliage_start_at)? true : false;
             let geometry = isALeaf ? foliage_geometry : trunk_geometry;
-            let object = new THREE.Mesh(geometry, selected_material);
+            let object = new THREE.Mesh(geometry, material);
             object.angle = angleInRadians * i;
             let coord = phyllotaxisConical(i, angleInRadians, options.spread, options.z_decrease);
             object.position.set(coord.x, coord.y, coord.z);
