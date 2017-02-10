@@ -3,12 +3,13 @@ import {phyllotaxisConical} from './phillotaxis.js';
 import * as THREE from 'THREE';
 
 export default class PalmGenerator{
-    constructor(foliage_options, general_options, material){
+    constructor(foliage_options, general_options){
         let cleaned_leaf_geometry_options =
             this.merge_and_validate_foliage(foliage_options, this.default_foliage_options());
         let cleaned_general_options =
             this.merge_and_validate_general(general_options, this.default_general_options());
-        let objects = this.buildPalm(cleaned_leaf_geometry_options, cleaned_general_options, material);
+
+        let objects = this.buildPalm(cleaned_leaf_geometry_options, cleaned_general_options);
         let geometry = this.mergeObjectsInOneGeometry(objects);
         return geometry;
     }
@@ -16,14 +17,14 @@ export default class PalmGenerator{
     default_foliage_options(){
         return {
             length:20,
-            length_stem:4,
-            width_stem:2,
+            length_stem:1,
+            width_stem:0.7,
             leaf_width:0.5,
             leaf_up:1,
-            density:2,
-            positive_curvature: 0.05,
-            positive_curvature_border: 0.05,
-            leaf_inclination: 0.2
+            density:21,
+            curvature: 0.05,
+            curvature_border: 0.05,
+            leaf_inclination: 0.7
         };
     }
 
@@ -51,7 +52,8 @@ export default class PalmGenerator{
         return opt;
     }
 
-    buildPalm(leaf_geometry_options, general_options, material){
+    buildPalm(leaf_geometry_options, general_options){
+        let material = new THREE.MeshBasicMaterial();
         let radius = 5;
         let leafGeometry = new LeafGeometry(leaf_geometry_options);//here you could have passed any type of geometry, anyway, with the leafGeometry it looks like a palm
         let trunkGeometry = new THREE.BoxGeometry( radius, radius, radius);
@@ -71,6 +73,7 @@ export default class PalmGenerator{
             let coord = phyllotaxisConical(i, angleInRadians, options.spread, options.z_decrease);
             object.position.set(coord.x, coord.y, coord.z);
             if (isALeaf) {
+                //console.log(options);
                 this.transformIntoLeaf(object, i, angleInRadians, options);
             } else {
                 object.rotateZ( i* angleInRadians);
@@ -101,12 +104,54 @@ export default class PalmGenerator{
     }
 
     mergeObjectsInOneGeometry(objects){
+        // BUFFER_FEATURE
+        //let hash_vertex_info = getTotNumVertices(foliage_geometry, trunk_geometry, tot, foliage_start_at);
+        //let buffers = createBuffers(hash_vertex_info.tot_vertices);
         let geometry = new THREE.Geometry();
         for (let i = 0; i < objects.length; i++){
+            // BUFFER_FEATURE
+            // if (i <= gui.params.foliage_start_at) {
+            //     //fullfill color
+            //     for(let pos=(i*hash_vertex_info.n_vertices_leaf); pos < ((i+1) * hash_vertex_info.n_vertices_leaf); pos++){
+            //         buffers.angleBuffer[pos] = objs[i].angle;
+            //         buffers.isLeafBuffer[pos] = 1.0;
+            //     }
+            // } else {
+            //     for(let pos=(i*hash_vertex_info.n_vertices_trunk); pos < ((i+1) * hash_vertex_info.n_vertices_trunk); pos++){
+            //         buffers.angleBuffer[pos] = objs[i].angle;
+            //         buffers.isLeafBuffer[pos] = 0.0;
+            //     }
+            // }
+            // end code used for buffers
+
             let mesh = objects[i];
             mesh.updateMatrix();
             geometry.merge(mesh.geometry, mesh.matrix);
         }
         return geometry;
     }
+
+    // Here some functions used for the BUFFER_FEATURE, actually used. It is a WIP for calculating the buffers, but is not working
+    createBuffers(n_vert){
+        return {
+            angleBuffer: new Float32Array(n_vert),
+            isLeafBuffer: new Float32Array(n_vert)
+        };
+    }
+
+
+    getTotNumVertices(foliage_geometry, trunk_geometry, tot_objects, foliage_start_at){
+        let adjusted_foliage_start_at = foliage_start_at + 1; //counting the 0 too
+        let vertices_in_leaf = foliage_geometry.vertices.length * 3;
+        let vertices_in_trunk = trunk_geometry.vertices.length * 3;
+        let n_vertices_in_leaf = adjusted_foliage_start_at * vertices_in_leaf;
+        let n_vertices_in_trunk = (tot_objects - adjusted_foliage_start_at) * vertices_in_trunk;
+        return{
+            tot_vertices: (n_vertices_in_trunk + n_vertices_in_leaf),
+            n_vertices_leaf: n_vertices_in_leaf,
+            n_vertices_trunk: n_vertices_in_trunk
+        };
+    }
+
+
 }

@@ -2,16 +2,19 @@ import {Vector3, Vector2, Face3, Geometry} from 'three';
 
 export default class LeafGeometry{
     constructor(
-                length=20,
-                length_stem=4,
-                width_stem=2,
-                leaf_width=0.5,
-                leaf_up=1,
-                density=2,
-                positive_curvature= 0.05,
-                positive_curvature_border= 0.05,
-                leaf_inclination= 0.2
+        options
     ){
+        let opt = Object.assign(this._defaultOptions(), options);
+        let length=opt.length;
+        let length_stem=opt.length_stem;
+        let width_stem=opt.width_stem;
+        let leaf_width=opt.leaf_width;
+        let leaf_up=opt.leaf_up;
+        let density= opt.density;
+        let positive_curvature=opt.curvature;
+        let positive_curvature_border=opt.curvature_border;
+        let leaf_inclination=opt.leaf_inclination;
+
         //leaf_width it's a value that goes from 0.1 to 1.0
         let curvature = positive_curvature * -1.0;
         let curvature_border = positive_curvature_border * -1.0;
@@ -137,7 +140,6 @@ export default class LeafGeometry{
         geom.vertices = vertices;
         geom.faces = faces;
         geom.computeFaceNormals();
-        geom.computeTangents();
         this.assignUVs(geom);
         return geom;
     }
@@ -172,6 +174,21 @@ export default class LeafGeometry{
     _getVauleOnParabola(curvature, z, z_zero, y_zero){
         let y = curvature * ((z - z_zero)*(z - z_zero)) + y_zero;
         return y;
+    }
+
+    _defaultOptions(){
+        return {
+            length:20,
+            length_stem: 4,
+            width_stem:2,
+            leaf_width:0.5,
+            leaf_up:1,
+            density:2,
+            curvature: 0.05,
+            curvature_border: 0.05,
+            leaf_inclination: 0.2
+        };
+
     }
 
     _getPointZero(curvature, length){
