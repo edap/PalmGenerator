@@ -6,11 +6,19 @@ export default class PalmGenerator{
         let cleaned_options =
             this.merge_and_validate_options(options, this.default_options());
 
+        let hash_vertex_info = this.getTotNumVertices(leaf_geometry,
+                                                      trunk_geometry,
+                                                      cleaned_options.num,
+                                                      cleaned_options.foliage_start_at);
+        console.log(hash_vertex_info);
+
         let objects = this.buildPalm(leaf_geometry,
                                      trunk_geometry,
                                      cleaned_options);
         let geometry = this.mergeObjectsInOneGeometry(objects);
-        return geometry;
+        return {
+            geometry:geometry
+        };
     }
 
     default_options(){
@@ -81,7 +89,6 @@ export default class PalmGenerator{
     mergeObjectsInOneGeometry(objects){
         // BUFFER_FEATURE/ If this feature will be imprlemented, the buffer generator will returns an hash containing:
         // 1)a geometry 2)buffer for the colors, 3)buffer for the isLeaf
-        //let hash_vertex_info = getTotNumVertices(foliage_geometry, trunk_geometry, tot, foliage_start_at);
         //let buffers = createBuffers(hash_vertex_info.tot_vertices);
         let geometry = new THREE.Geometry();
         for (let i = 0; i < objects.length; i++){
@@ -117,8 +124,8 @@ export default class PalmGenerator{
 
     getTotNumVertices(foliage_geometry, trunk_geometry, tot_objects, foliage_start_at){
         let adjusted_foliage_start_at = foliage_start_at + 1; //counting the 0 too
-        let vertices_in_leaf = foliage_geometry.vertices.length * 3;
-        let vertices_in_trunk = trunk_geometry.vertices.length * 3;
+        let vertices_in_leaf = foliage_geometry.faces.length * 3;
+        let vertices_in_trunk = trunk_geometry.faces.length * 3;
         let n_vertices_in_leaf = adjusted_foliage_start_at * vertices_in_leaf;
         let n_vertices_in_trunk = (tot_objects - adjusted_foliage_start_at) * vertices_in_trunk;
         return{

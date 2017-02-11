@@ -63,8 +63,10 @@ function init(){
 
     let trunkGeometry = new THREE.BoxGeometry(5,5,5);
     let leafGeometry = new LeafGeometry(opt);
-    let geometry = new PalmGenerator(leafGeometry, trunkGeometry, {});
+    let geometry = new PalmGenerator(leafGeometry, trunkGeometry, {num:100, foliage_start_at:30}).geometry;
     let bufGeometry = new THREE.BufferGeometry().fromGeometry(geometry);
+    console.log("buffered");
+    console.log(bufGeometry.attributes.position.count);
     scene.add(new THREE.Mesh(bufGeometry, material));
 }
 
