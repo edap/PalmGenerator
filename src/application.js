@@ -65,13 +65,13 @@ function init(){
     let leafGeometry = new LeafGeometry(opt);
     let palm = new PalmGenerator(leafGeometry,
                                      trunkGeometry,
-                                     {num:100, foliage_start_at:30},
+                                     {num:1200, foliage_start_at:40},
                                      true
                                     );
     let geometry = palm.geometry;
     let palmBuffers = palm.buffers;
     let bufGeometry = new THREE.BufferGeometry().fromGeometry(geometry);
-    //console.log(palmBuffers);
+    console.log(palmBuffers);
     bufGeometry.addAttribute( 'angle', new THREE.BufferAttribute(
         palmBuffers.angle,
         1));

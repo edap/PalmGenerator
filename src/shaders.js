@@ -33,14 +33,26 @@ export function fragmentShader(){
         "};\n"+
 
         "uniform PointLight pointLights[ NUM_POINT_LIGHTS ];\n"+
+
+        "vec3 hsb2rgb( in vec3 c ){\n"+
+            "vec3 rgb = clamp(abs(mod(c.x*6.0+vec3(0.0,4.0,2.0),\n"+
+            "6.0)-3.0)-1.0,\n"+
+            "0.0,\n"+
+            "1.0 );\n"+
+            "rgb = rgb*rgb*(3.0-2.0*rgb);\n"+
+            "return c.z * mix(vec3(1.0), rgb, c.y);\n"+
+        "}\n"+
+
         "void main(){\n"+
             "vec4 addedLights = vec4(0.0,0.0,0.0, 1.0);\n"+
             "for(int l = 0; l < 3; l++){\n"+
                 "vec3 adjustedLight = pointLights[l].position + cameraPosition;\n"+
                 "vec3 lightDirection = normalize(vecPos.xyz - adjustedLight);\n"+
                 "addedLights.rgb += clamp(dot(-lightDirection, vecNormal), 0.0, 1.0) * pointLights[l].color;\n"+
-            "}\n"+
-            "vec4 col = mix(vec4(color, 1.0), vec4(addedLights.rgb, 1.0), 0.5);\n"+
+                "}\n"+
+            "float angleToCol = clamp(fAngle/256.0, 0.1, 0.9);\n"+
+            "vec3 angleColor = vec3(angleToCol, 1.0, 1.0);\n"+
+            "vec4 col = mix(vec4(hsb2rgb(angleColor), 1.0), vec4(addedLights.rgb, 1.0), 0.2);\n"+
             "gl_FragColor = col;\n"+
         "}";
 

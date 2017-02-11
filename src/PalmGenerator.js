@@ -15,6 +15,7 @@ export default class PalmGenerator{
                                                       trunk_geometry,
                                                       cleaned_options.num,
                                                       cleaned_options.foliage_start_at);
+
             buffers = this.createBuffers(hash_vertex_info.tot_vertices);
             objects = this.buildPalm(leaf_geometry,
                                          trunk_geometry,
@@ -31,7 +32,6 @@ export default class PalmGenerator{
             geometry = this.mergeObjectsInOneGeometry(objects, cleaned_options);
             result =  { geometry:geometry };
         }
-
         return result;
     }
 
@@ -67,7 +67,9 @@ export default class PalmGenerator{
             let isALeaf = (i <= options.foliage_start_at)? true : false;
             let geometry = isALeaf ? foliage_geometry : trunk_geometry;
             let object = new THREE.Mesh(geometry, material);
-            object.angle = angleInRadians * i;
+            //object.angle = angleInRadians * i;
+            object.angle = (options.angle * i) % 256;
+            //object.angle = i;
             let coord = phyllotaxisConical(i, angleInRadians, options.spread, options.z_decrease);
             object.position.set(coord.x, coord.y, coord.z);
             if (isALeaf) {
@@ -103,17 +105,19 @@ export default class PalmGenerator{
     mergeObjectsInOneGeometryAndFullfilBuffers(objs, opt, vertex_info, buffers){
         //let buffers = createBuffers(hash_vertex_info.tot_vertices);
         let geometry = new THREE.Geometry();
+        let current_pos = 0; // current position in the buffers
         for (let i = 0; i < objs.length; i++){
             if (i <= opt.foliage_start_at) {
-                //fullfill color
-                for(let pos=(i*vertex_info.n_vertices_leaf); pos < ((i+1) * vertex_info.n_vertices_leaf); pos++){
-                    buffers.angle[pos] = objs[i].angle;
-                    buffers.isLeaf[pos] = 1.0;
+                for(let pos=0; pos < vertex_info.n_vertices_leaf; pos++){
+                    buffers.angle[current_pos] = objs[i].angle;
+                    buffers.isLeaf[current_pos] = 1.0;
+                    current_pos ++;
                 }
             } else {
-                for(let pos=(i*vertex_info.n_vertices_trunk); pos < ((i+1) * vertex_info.n_vertices_trunk); pos++){
-                    buffers.angle[pos] = objs[i].angle;
-                    buffers.isLeaf[pos] = 0.0;
+                for(let pos=0; pos < vertex_info.n_vertices_trunk; pos++){
+                    buffers.angle[current_pos] = objs[i].angle;
+                    buffers.isLeaf[current_pos] = 0.0;
+                    current_pos ++;
                 }
             }
 
@@ -121,6 +125,7 @@ export default class PalmGenerator{
             mesh.updateMatrix();
             geometry.merge(mesh.geometry, mesh.matrix);
         }
+        //debugger;
         return geometry;
     }
     mergeObjectsInOneGeometry(objects){
