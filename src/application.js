@@ -10,8 +10,8 @@ import CollectionMaterials from './materials.js';
 import {PointLights} from './pointLights.js';
 
 const materials = new CollectionMaterials;
-//let material = getMaterial();
-let material = materials["phong"];
+let material = getMaterial();
+//let material = materials["phong"];
 const gui = new Gui(material);
 
 const stats = new Stats();
@@ -63,10 +63,20 @@ function init(){
 
     let trunkGeometry = new THREE.BoxGeometry(5,5,5);
     let leafGeometry = new LeafGeometry(opt);
-    let geometry = new PalmGenerator(leafGeometry, trunkGeometry, {num:100, foliage_start_at:30}).geometry;
+    let palm = new PalmGenerator(leafGeometry,
+                                     trunkGeometry,
+                                     {num:100, foliage_start_at:30},
+                                     true
+                                    );
+    let geometry = palm.geometry;
+    let palmBuffers = palm.buffers;
     let bufGeometry = new THREE.BufferGeometry().fromGeometry(geometry);
     console.log("buffered");
     console.log(bufGeometry.attributes.position.count);
+    console.log(palmBuffers);
+    bufGeometry.addAttribute( 'angle', new THREE.BufferAttribute(
+        palmBuffers.angle,
+        1));
     scene.add(new THREE.Mesh(bufGeometry, material));
 }
 
@@ -74,7 +84,7 @@ function getMaterial(){
     let screenResolution = new THREE.Vector2(window.innerWidth, window.innerHeight);
     let tmp_uniforms = {
 		    time: { value: 1.0 },
-        color: {type: "c", value: new THREE.Color( gui.params.color )},
+        color: {type: "c", value: new THREE.Color( 0xff3322 )},
 		    uResolution: { value: screenResolution }
 	  };
     //console.log(vertexShader());

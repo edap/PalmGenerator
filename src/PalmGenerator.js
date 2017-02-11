@@ -2,23 +2,37 @@ import {phyllotaxisConical} from './phillotaxis.js';
 import * as THREE from 'THREE';
 
 export default class PalmGenerator{
-    constructor(leaf_geometry, trunk_geometry, options={}){
+    constructor(leaf_geometry, trunk_geometry, options={}, add_buffers=false){
+        let buffers;
+        let geometry;
+        let objects;
+        let result;
         let cleaned_options =
             this.merge_and_validate_options(options, this.default_options());
 
-        let hash_vertex_info = this.getTotNumVertices(leaf_geometry,
+        if (add_buffers){
+            let hash_vertex_info = this.getTotNumVertices(leaf_geometry,
                                                       trunk_geometry,
                                                       cleaned_options.num,
                                                       cleaned_options.foliage_start_at);
-        console.log(hash_vertex_info);
+            buffers = this.createBuffers(hash_vertex_info.tot_vertices);
+            objects = this.buildPalm(leaf_geometry,
+                                         trunk_geometry,
+                                         cleaned_options);
+            geometry = this.mergeObjectsInOneGeometryAndFullfilBuffers(objects,
+                                                                           cleaned_options,
+                                                                           hash_vertex_info,
+                                                                           buffers);
+            result =  { geometry:geometry, buffers: buffers };
+        }else{
+            objects = this.buildPalm(leaf_geometry,
+                                         trunk_geometry,
+                                         cleaned_options);
+            geometry = this.mergeObjectsInOneGeometry(objects, cleaned_options);
+            result =  { geometry:geometry };
+        }
 
-        let objects = this.buildPalm(leaf_geometry,
-                                     trunk_geometry,
-                                     cleaned_options);
-        let geometry = this.mergeObjectsInOneGeometry(objects);
-        return {
-            geometry:geometry
-        };
+        return result;
     }
 
     default_options(){
@@ -86,27 +100,32 @@ export default class PalmGenerator{
         object.rotateZ(-(Math.PI/2));
     }
 
-    mergeObjectsInOneGeometry(objects){
-        // BUFFER_FEATURE/ If this feature will be imprlemented, the buffer generator will returns an hash containing:
-        // 1)a geometry 2)buffer for the colors, 3)buffer for the isLeaf
+    mergeObjectsInOneGeometryAndFullfilBuffers(objs, opt, vertex_info, buffers){
         //let buffers = createBuffers(hash_vertex_info.tot_vertices);
         let geometry = new THREE.Geometry();
-        for (let i = 0; i < objects.length; i++){
-            // BUFFER_FEATURE
-            // if (i <= gui.params.foliage_start_at) {
-            //     //fullfill color
-            //     for(let pos=(i*hash_vertex_info.n_vertices_leaf); pos < ((i+1) * hash_vertex_info.n_vertices_leaf); pos++){
-            //         buffers.angleBuffer[pos] = objs[i].angle;
-            //         buffers.isLeafBuffer[pos] = 1.0;
-            //     }
-            // } else {
-            //     for(let pos=(i*hash_vertex_info.n_vertices_trunk); pos < ((i+1) * hash_vertex_info.n_vertices_trunk); pos++){
-            //         buffers.angleBuffer[pos] = objs[i].angle;
-            //         buffers.isLeafBuffer[pos] = 0.0;
-            //     }
-            // }
-            // end code used for buffers
+        for (let i = 0; i < objs.length; i++){
+            if (i <= opt.foliage_start_at) {
+                //fullfill color
+                for(let pos=(i*vertex_info.n_vertices_leaf); pos < ((i+1) * vertex_info.n_vertices_leaf); pos++){
+                    buffers.angle[pos] = objs[i].angle;
+                    buffers.isLeaf[pos] = 1.0;
+                }
+            } else {
+                for(let pos=(i*vertex_info.n_vertices_trunk); pos < ((i+1) * vertex_info.n_vertices_trunk); pos++){
+                    buffers.angle[pos] = objs[i].angle;
+                    buffers.isLeaf[pos] = 0.0;
+                }
+            }
 
+            let mesh = objs[i];
+            mesh.updateMatrix();
+            geometry.merge(mesh.geometry, mesh.matrix);
+        }
+        return geometry;
+    }
+    mergeObjectsInOneGeometry(objects){
+        let geometry = new THREE.Geometry();
+        for (let i = 0; i < objects.length; i++){
             let mesh = objects[i];
             mesh.updateMatrix();
             geometry.merge(mesh.geometry, mesh.matrix);
@@ -117,8 +136,8 @@ export default class PalmGenerator{
     // Here some functions used for the BUFFER_FEATURE, actually used. It is a WIP for calculating the buffers, but is not working
     createBuffers(n_vert){
         return {
-            angleBuffer: new Float32Array(n_vert),
-            isLeafBuffer: new Float32Array(n_vert)
+            angle: new Float32Array(n_vert),
+            isLeaf: new Float32Array(n_vert)
         };
     }
 
