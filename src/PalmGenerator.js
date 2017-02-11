@@ -149,8 +149,8 @@ export default class PalmGenerator{
         let n_vertices_in_trunk = (tot_objects - adjusted_foliage_start_at) * vertices_in_trunk;
         return{
             tot_vertices: (n_vertices_in_trunk + n_vertices_in_leaf),
-            n_vertices_leaf: n_vertices_in_leaf,
-            n_vertices_trunk: n_vertices_in_trunk
+            n_vertices_leaf: vertices_in_leaf,
+            n_vertices_trunk: vertices_in_trunk
         };
     }
 }

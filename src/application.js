@@ -71,9 +71,7 @@ function init(){
     let geometry = palm.geometry;
     let palmBuffers = palm.buffers;
     let bufGeometry = new THREE.BufferGeometry().fromGeometry(geometry);
-    console.log("buffered");
-    console.log(bufGeometry.attributes.position.count);
-    console.log(palmBuffers);
+    //console.log(palmBuffers);
     bufGeometry.addAttribute( 'angle', new THREE.BufferAttribute(
         palmBuffers.angle,
         1));
