@@ -80,15 +80,12 @@ function init(){
 
     //scene.add(new THREE.Mesh(bufGeometry, material));
     let mesh = new THREE.Mesh(bufGeometry, material);
-    mesh.material = new THREE.MeshBasicMaterial( {
-        color: 0xffffff,
-        polygonOffset: true,
-        polygonOffsetFactor: 1, // positive value pushes polygon further away
-        polygonOffsetUnits: 1
+    mesh.material = new THREE.MeshLambertMaterial( {
+        color: 0xffffff
     } );
     scene.add( mesh );
 
-    var helper = new THREE.EdgesHelper( mesh, 0x000000 );
+    var helper = new THREE.EdgesHelper( mesh, 0x969696 );
     helper.material.linewidth = 1;
     scene.add( helper );
 }
