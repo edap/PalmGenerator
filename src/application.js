@@ -66,17 +66,31 @@ function init(){
     let leafGeometry = new LeafGeometry(opt);
     let palm = new PalmGenerator(leafGeometry,
                                      trunkGeometry,
-                                     {num:1200, foliage_start_at:40},
+                                 {num:200, foliage_start_at:30, z_decrease:0.7},
                                      true
                                     );
     let geometry = palm.geometry;
-    let palmBuffers = palm.buffers;
     let bufGeometry = new THREE.BufferGeometry().fromGeometry(geometry);
-    console.log(palmBuffers);
-    bufGeometry.addAttribute( 'angle', new THREE.BufferAttribute(
-        palmBuffers.angle,
-        1));
-    scene.add(new THREE.Mesh(bufGeometry, material));
+    // disable color for a while
+    // let palmBuffers = palm.buffers;
+    // console.log(palmBuffers);
+    // bufGeometry.addAttribute( 'angle', new THREE.BufferAttribute(
+    //     palmBuffers.angle,
+    //     1));
+
+    //scene.add(new THREE.Mesh(bufGeometry, material));
+    let mesh = new THREE.Mesh(bufGeometry, material);
+    mesh.material = new THREE.MeshBasicMaterial( {
+        color: 0xffffff,
+        polygonOffset: true,
+        polygonOffsetFactor: 1, // positive value pushes polygon further away
+        polygonOffsetUnits: 1
+    } );
+    scene.add( mesh );
+
+    var helper = new THREE.EdgesHelper( mesh, 0x000000 );
+    helper.material.linewidth = 1;
+    scene.add( helper );
 }
 
 function getMaterial(){
