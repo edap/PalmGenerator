@@ -64,11 +64,13 @@ function init(){
 
     let trunkGeometry = new THREE.BoxGeometry(5,5,5);
     let leafGeometry = new LeafGeometry(opt);
+
+    let curve = getCurve();
+
     let palm = new PalmGenerator(leafGeometry,
-                                     trunkGeometry,
+                                 trunkGeometry,
                                  {num:200, foliage_start_at:30, z_decrease:0.7},
-                                     true
-                                    );
+                                 curve);
     let geometry = palm.geometry;
     let bufGeometry = new THREE.BufferGeometry().fromGeometry(geometry);
     // disable color for a while
@@ -88,6 +90,15 @@ function init(){
     var helper = new THREE.EdgesHelper( mesh, 0x969696 );
     helper.material.linewidth = 1;
     scene.add( helper );
+}
+
+function getCurve(){
+    var curve = new THREE.CatmullRomCurve3( [
+	      new THREE.Vector3( 0, 0, 0 ),
+	      new THREE.Vector3( -10, 0, -30 ),
+	      new THREE.Vector3( 10, 0, -100 )
+    ] );
+    return curve;
 }
 
 function getMaterial(){

@@ -1,8 +1,10 @@
-import {phyllotaxisConical} from './phillotaxis.js';
+import {phyllotaxisConical, phyllotaxisOnCurve} from './phillotaxis.js';
 import * as THREE from 'THREE';
 
 export default class PalmGenerator{
-    constructor(leaf_geometry, trunk_geometry, options={}){
+    // keep in mind, palm grows along the z axis. Specifically, from positive
+    // z axis to negative z-axis
+    constructor(leaf_geometry, trunk_geometry, options={}, curve=false){
         let buffers;
         let geometry;
         let objects;
@@ -18,8 +20,8 @@ export default class PalmGenerator{
 
             buffers = this._createBuffers(hash_vertex_info.tot_vertices);
             objects = this._buildPalm(leaf_geometry,
-                                         trunk_geometry,
-                                         cleaned_options);
+                                      trunk_geometry,
+                                      cleaned_options);
             geometry = this._mergeObjectsInOneGeometryAndFullfilBuffers(objects,
                                                                            cleaned_options,
                                                                            hash_vertex_info,
@@ -27,8 +29,9 @@ export default class PalmGenerator{
             result =  { geometry:geometry, buffers: buffers };
         } else {
             objects = this._buildPalm(leaf_geometry,
-                                         trunk_geometry,
-                                         cleaned_options);
+                                      trunk_geometry,
+                                      cleaned_options,
+                                      curve);
             geometry = this._mergeObjectsInOneGeometry(objects, cleaned_options);
             result =  { geometry:geometry };
         }
@@ -49,14 +52,25 @@ export default class PalmGenerator{
     }
 
     _merge_and_validate_options(options, defaults){
-        //TODO implement validations
+        //TODO implement validations, check if the first point in the
+        // curve as a z value bigger than the last one
         let opt = Object.assign(defaults, options);
         return opt;
     }
 
-    _buildPalm(leaf_geometry, trunk_geometry, general_options){
+    _buildPalm(leaf_geometry, trunk_geometry, options, curve){
         let material = new THREE.MeshBasicMaterial();
-        let objects = this._populatePalm(leaf_geometry, trunk_geometry, general_options, material);
+        let objects;
+        if (curve) {
+            // TODO, validate curve, as the user may expect that the starting point
+            // is on z
+            let curve_geometry = this._createGeometryCurve(curve, options.num);
+            objects = this._populatePalmOnCurve(
+                leaf_geometry, trunk_geometry, options, material, curve_geometry);
+        } else {
+            objects = this._populatePalm(
+                leaf_geometry, trunk_geometry, options, material);
+        }
         return objects;
     }
 
@@ -83,6 +97,48 @@ export default class PalmGenerator{
         }
         return objs;
     }
+    _populatePalmOnCurve(foliage_geometry, trunk_geometry, options, material, curve_geometry) {
+        let objects = [];
+        let PItoDeg = (Math.PI/180.0);
+        let angleInRadians = options.angle * PItoDeg;
+        for (var i = 0; i< options.num; i++) {
+            let isALeaf = (i <= options.foliage_start_at)? true : false;
+            let geometry = isALeaf ? foliage_geometry : trunk_geometry;
+            let object = new THREE.Mesh(geometry, material);
+            let coord = phyllotaxisOnCurve(i, angleInRadians, options.spread, curve_geometry);
+            object.position.set(coord.x, coord.y, coord.z);
+
+            //object.lookAt(coord.prev);
+            if (isALeaf) {
+                // if it is a leave, they all should be orientated to the
+                // beginning of the curve
+                if (i!==0) {
+                    object.lookAt(coord.prev);
+                } else {
+                    //object number 0 soffer of gimbal loock
+                    // because he's lookingAt is own position probably
+                    object.lookAt(coord.prev);
+                    object.rotateY( (40 + options.angle_y * 100/options.num ) * -PItoDeg );
+                }
+                this._transformIntoLeaf(object, i, angleInRadians, options);
+            } else {
+                object.lookAt(coord.prev);
+                object.rotateZ(i* angleInRadians);
+                object.rotateY((90 + options.angle_y + i * 100/options.num ) * -PItoDeg);
+            }
+
+            objects.push(object);
+        }
+        return objects;
+    }
+
+    _createGeometryCurve(curve, number_tot_objects){
+        // curve is expected to be a CatmullRomCurve3
+        let curveGeometry = new THREE.Geometry();
+        curveGeometry.vertices = curve.getPoints(number_tot_objects);
+        return curveGeometry;
+    }
+
 
     _transformIntoLeaf(object, iter, angleInRadians, options){
         let PItoDeg = (Math.PI/180.0);
