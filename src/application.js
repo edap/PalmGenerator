@@ -28,6 +28,7 @@ function init(){
     renderer.setSize(window.innerWidth, window.innerHeight);
     document.body.style.margin =0;
     document.body.appendChild(renderer.domElement);
+    document.body.addEventListener("keypress", maybeSpacebarPressed);
 
     stats.showPanel( 0 ); // 0: fps, 1: ms, 2: mb, 3+: custom
     document.body.appendChild( stats.dom );

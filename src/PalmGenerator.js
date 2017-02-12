@@ -2,7 +2,7 @@ import {phyllotaxisConical} from './phillotaxis.js';
 import * as THREE from 'THREE';
 
 export default class PalmGenerator{
-    constructor(leaf_geometry, trunk_geometry, options={}, add_buffers=false){
+    constructor(leaf_geometry, trunk_geometry, options={}){
         let buffers;
         let geometry;
         let objects;
@@ -10,7 +10,7 @@ export default class PalmGenerator{
         let cleaned_options =
             this.merge_and_validate_options(options, this.default_options());
 
-        if (add_buffers){
+        if (cleaned_options.buffers){
             let hash_vertex_info = this.getTotNumVertices(leaf_geometry,
                                                       trunk_geometry,
                                                       cleaned_options.num,
@@ -43,7 +43,8 @@ export default class PalmGenerator{
             z_decrease: 0.05,
             foliage_start_at: 50,
             starting_angle_y: 50,
-            angle_y: 29
+            angle_y: 29,
+            buffers:false
         };
     }
 

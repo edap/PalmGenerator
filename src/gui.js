@@ -18,8 +18,8 @@ export default class Gui extends DAT.GUI{
             foliage_start_at: 2,
             starting_angle_y: 50,
             angle_y: 29,
+            buffers: false,
 
-            bla: 2,
             color: 0x000022,
             emissive: 0x28000,
             specular: 0x445566,
@@ -53,6 +53,7 @@ export default class Gui extends DAT.GUI{
         //this.add(this.params, "num").min(60).max(1200).step(1).listen();
         this.add(this.params, "z_decrease").min(0.04).max(0.25).step(0.01);
         this.add(this.params, "foliage_start_at").min(10).max(320);
+        this.add(this.params, "buffers");
 
         let foliage = this.addFolder('foliage');
         foliage.add(this.params, "angle_y").min(0).max(80);
