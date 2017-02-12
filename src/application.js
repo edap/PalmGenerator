@@ -115,6 +115,14 @@ function getMaterial(){
     return material;
 }
 
+function maybeSpacebarPressed(e){
+    if (e.keyCode === 0 || e.keyCode === 32) {
+        e.preventDefault();
+            let cameraSpeed = 0.9;
+            camera.position.z  += cameraSpeed;
+        }
+    }
+
 
 function render(){
     stats.begin();

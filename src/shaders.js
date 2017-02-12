@@ -50,9 +50,9 @@ export function fragmentShader(){
                 "vec3 lightDirection = normalize(vecPos.xyz - adjustedLight);\n"+
                 "addedLights.rgb += clamp(dot(-lightDirection, vecNormal), 0.0, 1.0) * pointLights[l].color;\n"+
                 "}\n"+
-            "float angleToCol = clamp(fAngle/256.0, 0.1, 0.9);\n"+
-            "vec3 angleColor = vec3(angleToCol, 1.0, 1.0);\n"+
-            "vec4 col = mix(vec4(hsb2rgb(angleColor), 1.0), vec4(addedLights.rgb, 1.0), 0.2);\n"+
+            "float angleToCol = clamp(fAngle/256.0, 0.4, 0.8);\n"+ // questi due valori definiscono il range
+            "vec3 angleHSBColor = vec3(angleToCol, 0.2, 0.5);\n"+
+            "vec4 col = mix(vec4(hsb2rgb(angleHSBColor), 1.0), vec4(addedLights.rgb, 1.0), 0.2);\n"+
             "gl_FragColor = col;\n"+
         "}";
 
