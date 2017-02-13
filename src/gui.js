@@ -60,7 +60,7 @@ export default class Gui extends DAT.GUI{
         leaf.add(this.params, "width_stem").min(0.2).max(2.4).step(0.1);
         leaf.add(this.params, "leaf_width").min(0.1).max(1.0).step(0.1);
         leaf.add(this.params, "leaf_up").min(0.1).max(6.0).step(0.1);
-        leaf.add(this.params, "density").min(15).max(180).step(1);
+        leaf.add(this.params, "density").min(3).max(80).step(1);
         leaf.add(this.params, "curvature").min(0.01).max(0.06).step(0.01);
         leaf.add(this.params, "curvature_border").min(0.001).max(0.01).step(0.001);
         leaf.add(this.params, "leaf_inclination").min(0.1).max(1.0).step(0.1);
@@ -68,14 +68,14 @@ export default class Gui extends DAT.GUI{
         let mat = this.addFolder('Material');
         mat.addColor(this.params, 'color' ).onChange( this._handleColorChange( this.material.color ) );
         mat.addColor(this.params, 'emissive' ).onChange( this._handleColorChange( this.material.emissive ) );
-        mat.addColor(this.params, 'specular' ).onChange( this._handleColorChange( this.material.specular ) );
-        mat.add(this.params, 'shininess', 0, 100).onChange( (val)=>{this.material.shininess = val;});
+        //mat.addColor(this.params, 'specular' ).onChange( this._handleColorChange( this.material.specular ) );
+        //mat.add(this.params, 'shininess', 0, 100).onChange( (val)=>{this.material.shininess = val;});
 
-        let anim = this.addFolder('animation');
-        anim.add(this.params, "anim_spread");
-        anim.add(this.params, "anim_decrease_objects");
-        anim.add(this.params, "zoetrope");
-        anim.add(this.params, "zoetrope_angle").min(130).max(150).step(0.01);
+        // let anim = this.addFolder('animation');
+        // anim.add(this.params, "anim_spread");
+        // anim.add(this.params, "anim_decrease_objects");
+        // anim.add(this.params, "zoetrope");
+        // anim.add(this.params, "zoetrope_angle").min(130).max(150).step(0.01);
     }
 
     // credtis to these methods goes to Greg Tatum https://threejs.org/docs/scenes/js/material.js

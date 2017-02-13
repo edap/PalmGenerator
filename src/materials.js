@@ -11,7 +11,7 @@ export default class CollectionMaterials {
                 specular: 0x413e0f,
                 shininess: 26
             }),
-            "lambert": new THREE.MeshPhongMaterial({color: 0x2194CE})
+            "lambert": new THREE.MeshLambertMaterial({color: 0xffffff, emissive: 0x4ec84c})
         };
         return materials;
     }
