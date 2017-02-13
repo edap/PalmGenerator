@@ -47,6 +47,7 @@ export default class PalmGenerator{
             foliage_start_at: 50,
             starting_angle_y: 50,
             angle_y: 29,
+            trunk_regular:true,
             buffers:false
         };
     }
@@ -91,7 +92,11 @@ export default class PalmGenerator{
                 this._transformIntoLeaf(object, i, angleInRadians, options);
             } else {
                 object.rotateZ( i* angleInRadians);
-                object.rotateY( (90 + options.angle_y + i * 100/options.num ) * -PItoDeg );
+                if(options.trunk_regular){
+                    object.rotateY( (90 + options.angle_y ) * -PItoDeg );
+                }else{
+                    object.rotateY( (90 + options.angle_y + i * 100/options.num ) * -PItoDeg );
+                }
             }
             objs.push(object);
         }

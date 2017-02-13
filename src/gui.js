@@ -13,17 +13,13 @@ export default class Gui extends DAT.GUI{
         this.params = {
             spread: 0.2,
             angle: 137.5,
-            num: 4,
+            num: 500,
             z_decrease: 0.05,
-            foliage_start_at: 2,
+            foliage_start_at: 20,
             starting_angle_y: 50,
             angle_y: 29,
+            trunk_regular:true,
             buffers: false,
-
-            color: 0x000022,
-            emissive: 0x28000,
-            specular: 0x445566,
-            shininess: 50,
 
             length:50,
             length_stem:4,
@@ -35,24 +31,23 @@ export default class Gui extends DAT.GUI{
             curvature_border: 0.005,
             leaf_inclination: 0.2,
 
+            color: 0xffe29d,
+            emissive: 0x4ec84c,
+            //specular: 0x445566,
+            //shininess: 50,
 
-            anim_spread: false,
-            anim_decrease_objects: false,
-            zoetrope_rotation: 137.035,
-            zoetrope:false,
-            zoetrope_angle:139.71,
-
-            backgroundColor:"#57be92",
-            ambientLight:"#cf9e00"
+            backgroundColor:"#ffffff",
+            ambientLight:"#3ccf00"
         };
-        //this.remember(this.params);
+        this.remember(this.params);
 
 
-        this.add(this.params, "spread").min(0).max(0.7).step(0.1).listen();
+        this.add(this.params, "spread").min(0).max(0.7).step(0.1);
         this.add(this.params, "angle").min(132.0).max(138.0).step(0.01);
-        //this.add(this.params, "num").min(60).max(1200).step(1).listen();
+        this.add(this.params, "num").min(60).max(1200).step(1);
         this.add(this.params, "z_decrease").min(0.04).max(0.25).step(0.01);
-        this.add(this.params, "foliage_start_at").min(10).max(320);
+        this.add(this.params, "foliage_start_at").min(4).max(320);
+        this.add(this.params, "trunk_regular");
         this.add(this.params, "buffers");
 
         let foliage = this.addFolder('foliage');
