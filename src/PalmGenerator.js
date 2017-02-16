@@ -216,4 +216,13 @@ export default class PalmGenerator{
             n_vertices_trunk: vertices_in_trunk
         };
     }
+
+    _ripositionGeometryAndRotateIt(){
+        //The origina phyllotaxis pattern in 2d was developing on axes
+        // x and y. When moving to 3d I've simply used the same algorithm
+        // and added a third dimension, z. The tree was growing from the leafs
+        //to the roots along the negative z axis. This turns out to be a bit impractical when positioning the palms on a scene, that's why i make here 2 operation.
+        // 1) I move the palms up un the z axis, so that the roots are at 0
+        // 2) then I rotate the palm so that the growing direction is the y axis, not the z
+    }
 }
