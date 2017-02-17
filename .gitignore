@@ -19,6 +19,7 @@
 !.gitignore
 !README.md
 !example.png
+!example-curve.png
 !/src
 !/package.json
 !/webpack.config.js

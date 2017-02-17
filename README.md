@@ -102,6 +102,27 @@ The previous snippet shoulds generate a palm like this one:
 
 ![example](example.png)
 
+If we add a curve to the previous palm, passing an instance of a `CatmullRomCurve3` as fourth argument to the constructor, for example:
+
+```javascript
+var curve = new THREE.CatmullRomCurve3( [
+      new THREE.Vector3( -40, 150, 0 ),
+      new THREE.Vector3( -40, 100, 0 ),
+      new THREE.Vector3( 0, 60, 0 ),
+      new THREE.Vector3( 0, 0, 0 ),
+] );
+
+let palm = new PalmGenerator(leafGeometry,
+                            trunkGeometry,
+                            palm_opt,
+                            curve);
+```
+
+A palm like the following is generated:
+
+![example](example-curve.png)
+
+
 ## Online Editor
 If you want to generate your palm playing around with the parameters, try the [Palm Generator Online Editor]()
 
