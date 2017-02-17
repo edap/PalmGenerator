@@ -1,7 +1,7 @@
 /* eslint-env browser */
 
 import * as THREE from 'three';
-import LeafGeometry from './leafGeometry.js';
+import LeafGeometry from './LeafGeometry.js';
 import PalmGenerator from './PalmGenerator.js';
 import CollectionMaterials from './materials.js';
 import {PointLights} from './pointLights.js';
