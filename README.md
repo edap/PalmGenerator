@@ -103,7 +103,7 @@ The previous snippet shoulds generate a palm like this one:
 ![example](example.png)
 
 ## Online Editor
-If you want to generate your palm playing around with the parameters, you can try the [Palm Generator Online Editor]()
+If you want to generate your palm playing around with the parameters, try the [Palm Generator Online Editor]()
 
 
 
