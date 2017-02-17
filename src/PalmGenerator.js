@@ -26,6 +26,7 @@ export default class PalmGenerator{
                                                                            cleaned_options,
                                                                            hash_vertex_info,
                                                                            buffers);
+            this._repositionGeometryAndRotateIt(geometry);
             result =  { geometry:geometry, buffers: buffers };
         } else {
             objects = this._buildPalm(leaf_geometry,
@@ -33,6 +34,7 @@ export default class PalmGenerator{
                                       cleaned_options,
                                       curve);
             geometry = this._mergeObjectsInOneGeometry(objects, cleaned_options);
+            this._repositionGeometryAndRotateIt(geometry);
             result =  { geometry:geometry };
         }
         return result;
@@ -217,12 +219,15 @@ export default class PalmGenerator{
         };
     }
 
-    _ripositionGeometryAndRotateIt(){
+    _repositionGeometryAndRotateIt(geometry){
         //The origina phyllotaxis pattern in 2d was developing on axes
         // x and y. When moving to 3d I've simply used the same algorithm
         // and added a third dimension, z. The tree was growing from the leafs
-        //to the roots along the negative z axis. This turns out to be a bit impractical when positioning the palms on a scene, that's why i make here 2 operation.
-        // 1) I move the palms up un the z axis, so that the roots are at 0
-        // 2) then I rotate the palm so that the growing direction is the y axis, not the z
+        // to the roots along the negative z axis. This turns out to be a bit impractical when positioning the palms on a scene, that's why i make here 2 operation.
+        // 1) I rotate the palm on the x axis, so that it looks like the palm grows along the y axis, not the z
+        // 2) I move the palms up un the y axis, so that the roots are at 0
+        geometry.rotateX(-Math.PI/2);
+        let box = new THREE.Box3().setFromPoints(geometry.vertices);
+        geometry.applyMatrix( new THREE.Matrix4().makeTranslation(0, (box.min.y * -1), 0));
     }
 }
