@@ -39,5 +39,70 @@ The available options are:
 
 `curve`. Optional. A CatmullRomCurve3 can be passed as last argument. The first vertex in the curve will define the position of the treetop, the last one will define the position of the part of the trunk that is attached to the ground. Look at the curve in `src/application.js` to have an idea about how to make palms alongside curves. 
 
+The PalmGenerator returns an object containing the an instance of THREE.Geometry.
+
+Example:
+
+```javascript
+let leafGeometry = new THREE.SphereGeometry(5, 20, 20);
+let trunkGeometry = new THREE.BoxGeometry(5,5,5);
+let palm = new PalmGenerator(leafGeometry,
+                            trunkGeometry,
+                            curve);
+let geometry = palm.geometry;
+let bufGeometry = new THREE.BufferGeometry().fromGeometry(geometry);
+let mesh = new THREE.Mesh(bufGeometry, material);
+scene.add( mesh );
+```
+
+## Enter LeafGeometry
+
+The previous snippet generates a tree that looks weird. The trunk is fine but the foliage is really, ehm, abstract.
+This is because the PalmGenerator accepts any kind of geometry, but probably a sphere isn't much adapt to draw a leave. In order to have leaves the looks like palm leaves, I've created a custom geometry, called `LeafGeometry`. You can dowload the class `LeafGeometry.js` from the [repository](https://github.com/edap/LeafGeometry) and put it into your source folder. We change the previous snippet as follows:
+
+```javascript
+let leaf_opt = {
+    length: 60,
+    length_stem: 20,
+    width_stem: 0.2,
+    leaf_width: 0.8,
+    leaf_up: 1.5,
+    density: 11,
+    curvature: 0.04,
+    curvature_border: 0.005,
+    leaf_inclination: 0.9
+};
+
+let trunkGeometry = new THREE.BoxGeometry(5,5,5);
+let leafGeometry = new LeafGeometry(leaf_opt);
+
+let palm_opt = {
+    spread: 0.1,
+    angle: 137.5,
+    num: 406,
+    growth: 0.12,
+    foliage_start_at: 56,
+    trunk_regular: false,
+    buffers: false,
+    angle_open: 36.17,
+    starting_angle_open: 50
+};
+
+let palm = new PalmGenerator(leafGeometry,
+                            trunkGeometry,
+                            palm_opt);
+let geometry = palm.geometry;
+let bufGeometry = new THREE.BufferGeometry().fromGeometry(geometry);
+let mesh = new THREE.Mesh(bufGeometry, material);
+scene.add( mesh );
+```
+
+The `leaf_opt` hash contains a bunch of options, you can have an idea about what each option is doing playing around with this [demo](http://davideprati.com/demo/LeafGeometry/).
+The previous snippet should generate a palms like this one:
+
+![example](example.png)
+
+
+
 
 

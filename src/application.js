@@ -38,7 +38,7 @@ function init(){
     camera.position.z = 285;
     //camera.position.y = 10;
     let opt = {
-        length: 50,
+        length: 60,
         length_stem: 20,
         width_stem: 0.2,
         leaf_width: 0.8,
@@ -58,7 +58,7 @@ function init(){
         angle: 137.5,
         num: 406,
         growth: 0.12,
-        foliage_start_at: 86.19748205181567,
+        foliage_start_at: 56.19748205181567,
         trunk_regular: false,
         buffers: false,
         angle_open: 36.17438258159361,
@@ -67,8 +67,7 @@ function init(){
 
     let palm = new PalmGenerator(leafGeometry,
                                 trunkGeometry,
-                                 palm_opt,
-                                curve);
+                                 palm_opt);
     let geometry = palm.geometry;
     let bufGeometry = new THREE.BufferGeometry().fromGeometry(geometry);
     let mesh = new THREE.Mesh(bufGeometry, material);
