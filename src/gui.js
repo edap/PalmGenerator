@@ -31,13 +31,12 @@ export default class Gui extends DAT.GUI{
             curvature_border: 0.005,
             leaf_inclination: 0.2,
 
-            color: 0xffe29d,
-            emissive: 0x4ec84c,
-            //specular: 0x445566,
-            //shininess: 50,
-
-            backgroundColor:"#ffffff",
-            ambientLight:"#3ccf00"
+            color: 0xefff00,
+            emissive: 0x4ca078,
+            roughness:0.55,
+            metalness:0.89,
+            backgroundColor:"#505050",
+            ambientLight:"#34ac0f"
         };
         this.remember(this.params);
 
@@ -70,6 +69,9 @@ export default class Gui extends DAT.GUI{
         mat.addColor(this.params, 'emissive' ).onChange( this._handleColorChange( this.material.emissive ) );
         //mat.addColor(this.params, 'specular' ).onChange( this._handleColorChange( this.material.specular ) );
         //mat.add(this.params, 'shininess', 0, 100).onChange( (val)=>{this.material.shininess = val;});
+
+        mat.add(this.params, 'metalness', 0.0, 1.0).onChange( (val)=>{this.material.metalness = val;});
+        mat.add(this.params, 'roughness', 0.0, 1.0).onChange( (val)=>{this.material.roughness = val;});
 
         // let anim = this.addFolder('animation');
         // anim.add(this.params, "anim_spread");
