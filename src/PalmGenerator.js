@@ -47,16 +47,14 @@ export default class PalmGenerator{
             num: 500,
             growth: 0.05,
             foliage_start_at: 50,
-            starting_angle_y: 50,
-            angle_y: 29,
+            starting_angle_open: 50,
+            angle_open: 29,
             trunk_regular:true,
             buffers:false
         };
     }
 
     _merge_and_validate_options(options, defaults){
-        //TODO implement validations, check if the first point in the
-        // curve as a z value bigger than the last one
         let opt = Object.assign(defaults, options);
         return opt;
     }
@@ -65,8 +63,8 @@ export default class PalmGenerator{
         let material = new THREE.MeshBasicMaterial();
         let objects;
         if (curve) {
-            // TODO, validate curve, as the user may expect that the starting point
-            // is on z
+            //TODO implement validations, check if the first point in the
+            // curve as a y value bigger than the last one
             let curve_geometry = this._createGeometryCurve(curve, options.num);
             objects = this._populatePalmOnCurve(
                 leaf_geometry, trunk_geometry, options, material, curve_geometry);
@@ -95,9 +93,9 @@ export default class PalmGenerator{
             } else {
                 object.rotateZ( i* angleInRadians);
                 if(options.trunk_regular){
-                    object.rotateY( (90 + options.angle_y ) * -PItoDeg );
+                    object.rotateY( (90 + options.angle_open ) * -PItoDeg );
                 }else{
-                    object.rotateY( (90 + options.angle_y + i * 100/options.num ) * -PItoDeg );
+                    object.rotateY( (90 + options.angle_open + i * 100/options.num ) * -PItoDeg );
                 }
             }
             objs.push(object);
@@ -114,24 +112,17 @@ export default class PalmGenerator{
             let object = new THREE.Mesh(geometry, material);
             let coord = phyllotaxisOnCurve(i, angleInRadians, options.spread, curve_geometry);
             object.position.set(coord.x, coord.y, coord.z);
-
-            //object.lookAt(coord.prev);
+            object.lookAt(coord.prev);
             if (isALeaf) {
-                // if it is a leave, they all should be orientated to the
-                // beginning of the curve
-                if (i!==0) {
-                    object.lookAt(coord.prev);
-                } else {
-                    object.lookAt(coord.prev);
-                    // object number 0 soffer of gimbal loock
-                    // because he's lookingAt is own position probably.I've to move it
-                    object.rotateY( (40 + options.angle_y * 100/options.num ) * -PItoDeg );
+                // rotate the first leave, otherwise it looks at her self and goes in gimbal lock
+                if (i===0) {
+                    object.rotateY( (40 + options.angle_open * 100/options.num ) * -PItoDeg );
                 }
                 this._transformIntoLeaf(object, i, angleInRadians, options);
             } else {
                 object.lookAt(coord.prev);
                 object.rotateZ(i* angleInRadians);
-                object.rotateY((90 + options.angle_y + i * 100/options.num ) * -PItoDeg);
+                object.rotateY((90 + options.angle_open + i * 100/options.num ) * -PItoDeg);
             }
             objects.push(object);
         }
@@ -165,10 +156,10 @@ export default class PalmGenerator{
         // an object for 0
         let scaleRatio = ratio === 0 ? 0.001 : ratio;
         object.rotateZ( iter* angleInRadians);
-        let yrot = (iter/options.angle_y) * options.foliage_start_at;
+        let yrot = (iter/options.angle_open) * options.foliage_start_at;
         //object.rotateY( (yrot ) * -PItoDeg );
-        let y_angle = options.angle_y * scaleRatio;
-        object.rotateY( (options.starting_angle_y + y_angle + iter * 200/options.num ) * -PItoDeg );
+        let y_angle = options.angle_open * scaleRatio;
+        object.rotateY( (options.starting_angle_open + y_angle + iter * 200/options.num ) * -PItoDeg );
         // as leaves grow up, they become bigger
         object.scale.set(5 * scaleRatio ,1 ,1);
         object.rotateZ(-(Math.PI/2));
@@ -237,8 +228,6 @@ export default class PalmGenerator{
         // 2) I move the palms up un the y axis, so that the roots are at 0
         geometry.rotateX(-Math.PI/2);
         let box = new THREE.Box3().setFromPoints(geometry.vertices);
-        //console.log(box.min.y);
-        //geometry.applyMatrix( new THREE.Matrix4().makeTranslation(0, (box.min.y * -1), 0));
-        geometry.applyMatrix( new THREE.Matrix4().makeTranslation(0, ((box.min.y/2.7) * -1), 0));
+        geometry.applyMatrix( new THREE.Matrix4().makeTranslation(0, (box.min.y * -1), 0));
     }
 }
