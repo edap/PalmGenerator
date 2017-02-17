@@ -1,3 +1,6 @@
+//This file follows the apache 2.0 License, as reported in its repository
+// https://github.com/edap/LeafGeometry
+
 import {Vector3, Vector2, Face3, Geometry} from 'three';
 
 export default class LeafGeometry{
