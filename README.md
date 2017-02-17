@@ -102,6 +102,8 @@ The previous snippet shoulds generate a palm like this one:
 
 ![example](example.png)
 
+## Curve
+
 If we add a curve to the previous palm, passing an instance of a `CatmullRomCurve3` as fourth argument to the constructor, for example:
 
 ```javascript
