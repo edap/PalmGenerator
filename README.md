@@ -98,7 +98,7 @@ scene.add( mesh );
 ```
 
 The `leaf_opt` hash contains a bunch of options, you can have an idea about what each option is doing playing around with this [demo](http://davideprati.com/demo/LeafGeometry/).
-The previous snippet should generate a palms like this one:
+The previous snippet shoulds generate a palm like this one:
 
 ![example](example.png)
 
