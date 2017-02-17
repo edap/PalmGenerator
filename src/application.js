@@ -14,15 +14,8 @@ const scene = new THREE.Scene();
 const OrbitControls = require('three-orbit-controls')(THREE);
 const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
 const renderer = new THREE.WebGLRenderer({antialias:true});
-const resolution = new THREE.Vector2( window.innerWidth, window.innerHeight );
-
-let addCurve = false;
 
 function init(){
-    //setup the scene and the camera
-    document.body.style.margin=0;
-    document.body.style.padding=0;
-
     renderer.setSize(window.innerWidth, window.innerHeight);
     document.body.appendChild(renderer.domElement);
     let controls = new OrbitControls(camera, renderer.domElement);
@@ -43,43 +36,40 @@ function init(){
         camera.updateProjectionMatrix();
     });
 
-    camera.position.z = 140;
+    camera.position.z = 285;
+    //camera.position.y = 10;
     let opt = {
         length: 50,
-        length_stem: 4,
-        width_stem: 0.5,
-        leaf_width: 0.5,
+        length_stem: 20,
+        width_stem: 0.2,
+        leaf_width: 0.8,
         leaf_up: 1.5,
-        density: 30,
-        curvature: 0.03,
+        density: 11,
+        curvature: 0.04,
         curvature_border: 0.005,
-        leaf_inclination: 0.7000000000000001};
+        leaf_inclination: 0.9
+    };
 
     let trunkGeometry = new THREE.BoxGeometry(5,5,5);
     let leafGeometry = new LeafGeometry(opt);
 
     let curve = getCurve();
-    if (addCurve) {
-        var cgeometry = new THREE.Geometry();
-        cgeometry.vertices = curve.getPoints( 50 );
-        var cmaterial = new THREE.LineBasicMaterial( { color : 0xff0000 } );
-        var curveObject = new THREE.Line( cgeometry, cmaterial );
-        scene.add(curveObject);
-    }
+    let palm_opt = {
+        spread: 0.1,
+        angle: 137.5,
+        num: 406,
+        growth: 0.12,
+        foliage_start_at: 86.19748205181567,
+        trunk_regular: false,
+        buffers: false,
+        angle_open: 36.17438258159361,
+        starting_angle_open: 50
+    };
 
     let palm = new PalmGenerator(leafGeometry,
                                 trunkGeometry,
-                                 {        spread: 0,
-                                          angle: 137.5,
-                                          num: 500,
-                                          growth: 0.24,
-                                          foliage_start_at: 21.124475427461597,
-                                          trunk_regular: true,
-                                          buffers: false,
-                                          angle_y: 26.469060425556307,
-                                          starting_angle_y: 50},
-                                //curve);
-                                );
+                                 palm_opt,
+                                curve);
     let geometry = palm.geometry;
     let bufGeometry = new THREE.BufferGeometry().fromGeometry(geometry);
     let mesh = new THREE.Mesh(bufGeometry, material);
@@ -88,8 +78,8 @@ function init(){
 
 function getCurve(){
     var curve = new THREE.CatmullRomCurve3( [
-	      new THREE.Vector3( 0, 200, -40 ),
-	      new THREE.Vector3( 0, 100, -20 ),
+	      new THREE.Vector3( -40, 150, 0 ),
+	      new THREE.Vector3( -40, 100, 0 ),
 	      new THREE.Vector3( 0, 60, 0 ),
 	      new THREE.Vector3( 0, 0, 0 ),
     ] );
