@@ -4,7 +4,7 @@ The Palm Generator is a Three.js module to create palms. For the moment it is in
 At this [website](http://davideprati.com/projects/palm-generator) You can see some example of which kind of palms it is able to create.
 
 ## Usage
-This repository contains a usage example. In order to see it, `npm install`, `npm start`. If you want to include a palm done with this generator, copy the classes `PalmGenerator.js` and `phyllotaxis.js` in your source folder. 
+This repository contains a usage example. In order to see it, `npm install`, `npm start`. If you want to include a palm done with this generator, copy the classes `PalmGenerator.js` and `phyllotaxis.js` in your source folder and follow this instructions. 
 
 The palm generator constructor has the following signature:
 
@@ -101,6 +101,9 @@ The `leaf_opt` hash contains a bunch of options, you can have an idea about what
 The previous snippet shoulds generate a palm like this one:
 
 ![example](example.png)
+
+## Online Editor
+If you want to generate your palm playing around with the parameters, you can mess around with the [Palm Generator Online Editor]()
 
 
 
