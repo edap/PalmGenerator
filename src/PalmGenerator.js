@@ -1,4 +1,4 @@
-import {phyllotaxisConical, phyllotaxisOnCurve} from './phillotaxis.js';
+import {phyllotaxisConical, phyllotaxisOnCurve} from './phyllotaxis.js';
 import * as THREE from 'three';
 
 export default class PalmGenerator{
