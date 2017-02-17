@@ -1,4 +1,4 @@
-import {PointLight} from 'THREE';
+import {PointLight} from 'three';
 
 export function PointLights() {
     let lights = [];

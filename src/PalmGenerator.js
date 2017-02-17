@@ -1,5 +1,5 @@
 import {phyllotaxisConical, phyllotaxisOnCurve} from './phillotaxis.js';
-import * as THREE from 'THREE';
+import * as THREE from 'three';
 
 export default class PalmGenerator{
     // keep in mind, palm grows along the z axis. Specifically, from positive

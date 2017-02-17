@@ -1,4 +1,4 @@
-import * as THREE from 'THREE';
+import * as THREE from 'three';
 
 export default class CollectionMaterials {
     constructor(){
