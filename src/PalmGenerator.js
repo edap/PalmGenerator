@@ -45,7 +45,7 @@ export default class PalmGenerator{
             spread: 0.2,
             angle: 137.5,
             num: 500,
-            z_decrease: 0.05,
+            growth: 0.05,
             foliage_start_at: 50,
             starting_angle_y: 50,
             angle_y: 29,
@@ -88,7 +88,7 @@ export default class PalmGenerator{
             //object.angle = angleInRadians * i;
             object.angle = (options.angle * i) % 256;
             //object.angle = i;
-            let coord = phyllotaxisConical(i, angleInRadians, options.spread, options.z_decrease);
+            let coord = phyllotaxisConical(i, angleInRadians, options.spread, options.growth);
             object.position.set(coord.x, coord.y, coord.z);
             if (isALeaf) {
                 this._transformIntoLeaf(object, i, angleInRadians, options);
@@ -122,9 +122,9 @@ export default class PalmGenerator{
                 if (i!==0) {
                     object.lookAt(coord.prev);
                 } else {
-                    //object number 0 soffer of gimbal loock
-                    // because he's lookingAt is own position probably
                     object.lookAt(coord.prev);
+                    // object number 0 soffer of gimbal loock
+                    // because he's lookingAt is own position probably.I've to move it
                     object.rotateY( (40 + options.angle_y * 100/options.num ) * -PItoDeg );
                 }
                 this._transformIntoLeaf(object, i, angleInRadians, options);
@@ -133,16 +133,25 @@ export default class PalmGenerator{
                 object.rotateZ(i* angleInRadians);
                 object.rotateY((90 + options.angle_y + i * 100/options.num ) * -PItoDeg);
             }
-
             objects.push(object);
         }
         return objects;
     }
 
     _createGeometryCurve(curve, number_tot_objects){
-        // curve is expected to be a CatmullRomCurve3
+        // First point of the curve is the top of the foliage
+        // Last point of the curve is the bottom, where the root are.
+        // Curve is expected to be a CatmullRomCurve3
+        // that has as last vertex the position of the root
         let curveGeometry = new THREE.Geometry();
         curveGeometry.vertices = curve.getPoints(number_tot_objects);
+        // The origina phyllotaxis pattern in 2d was developing on axes
+        // x and y. When moving to 3d I've simply used the same algorithm
+        // and added a third dimension, z. The tree was growing from the leafs
+        // to the roots along the negative z axis. This turns out to be a bit impractical when positioning the palms on a scene, that's why i make here 2 operation.
+        // 1) I rotate the palm on the x axis, so that it looks like the palm grows along the y axis, not the z
+        // 2) I move the palms up un the y axis, so that the roots are at 0
+        curveGeometry.rotateX(-(Math.PI+ Math.PI/2));
         return curveGeometry;
     }
 
@@ -228,6 +237,8 @@ export default class PalmGenerator{
         // 2) I move the palms up un the y axis, so that the roots are at 0
         geometry.rotateX(-Math.PI/2);
         let box = new THREE.Box3().setFromPoints(geometry.vertices);
-        geometry.applyMatrix( new THREE.Matrix4().makeTranslation(0, (box.min.y * -1), 0));
+        //console.log(box.min.y);
+        //geometry.applyMatrix( new THREE.Matrix4().makeTranslation(0, (box.min.y * -1), 0));
+        geometry.applyMatrix( new THREE.Matrix4().makeTranslation(0, ((box.min.y/2.7) * -1), 0));
     }
 }
