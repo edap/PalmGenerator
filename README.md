@@ -101,7 +101,7 @@ The previous snippet should generate a palm like this one:
 
 ![example](example.png)
 
-## Curve
+## Curves
 
 If we add a curve to the previous palm, passing an instance of a `CatmullRomCurve3` as fourth argument to the constructor, for example:
 
