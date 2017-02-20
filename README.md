@@ -1,6 +1,6 @@
 # Palm Generator
 
-<iframe src="https://player.vimeo.com/video/204789237" width="888" height="600" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>
+<a href="https://vimeo.com/204789237">Video</a>
 
 The Palm Generator is a Three.js module to create palms. For the moment it is in beta version, and it is available just as es6 class, but an npm package will arrive soon.
 [Here](http://davideprati.com/projects/palm-generator) you can see what kind of palms it is able to create.
