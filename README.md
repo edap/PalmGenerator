@@ -127,7 +127,7 @@ A palm like the following one is created:
 
 
 ## Online Editor
-If you want to generate your palm playing around with the parameters, try the [Palm Generator Online Editor](davideprati.com/demo/palm-generator-editor/)
+If you want to generate your palm playing around with the parameters, try the [Palm Generator Online Editor](http://davideprati.com/demo/palm-generator-editor/)
 
 
 
