@@ -60,14 +60,14 @@ function init(){
         growth: 0.12,
         foliage_start_at: 56.19748205181567,
         trunk_regular: false,
-        buffers: false,
+        buffers: true,
         angle_open: 36.17438258159361,
         starting_angle_open: 50
     };
 
     let palm = new PalmGenerator(leafGeometry,
                                 trunkGeometry,
-                                 palm_opt);
+                                 palm_opt, curve);
     let geometry = palm.geometry;
     let bufGeometry = new THREE.BufferGeometry().fromGeometry(geometry);
     let mesh = new THREE.Mesh(bufGeometry, material);

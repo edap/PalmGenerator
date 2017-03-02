@@ -111,6 +111,7 @@ export default class PalmGenerator{
             let isALeaf = (i <= options.foliage_start_at)? true : false;
             let geometry = isALeaf ? foliage_geometry : trunk_geometry;
             let object = new THREE.Mesh(geometry, material);
+            object.angle = (options.angle * i) % 256;
             let coord = phyllotaxisOnCurve(i, angleInRadians, options.spread, curve_geometry);
             object.position.set(coord.x, coord.y, coord.z);
             object.lookAt(coord.prev);
