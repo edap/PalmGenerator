@@ -21,7 +21,8 @@ export default class PalmGenerator{
             buffers = this._createBuffers(hash_vertex_info.tot_vertices);
             objects = this._buildPalm(leaf_geometry,
                                       trunk_geometry,
-                                      cleaned_options);
+                                      cleaned_options,
+                                      curve);
             geometry = this._mergeObjectsInOneGeometryAndFullfilBuffers(objects,
                                                                            cleaned_options,
                                                                            hash_vertex_info,
