@@ -173,12 +173,20 @@ export default class PalmGenerator{
         for (let i = 0; i < objs.length; i++){
             if (i <= opt.foliage_start_at) {
                 for(let pos=0; pos < vertex_info.n_vertices_leaf; pos++){
+                    let angleColor = new THREE.Color().setHSL((objs[i].angle / 360.0), 0.5, 0.5);
+                    buffers.color[current_pos*3] = angleColor.r;
+                    buffers.color[current_pos*3 +1] = angleColor.g;
+                    buffers.color[current_pos*3 +2] = angleColor.b;
                     buffers.angle[current_pos] = objs[i].angle;
                     buffers.isLeaf[current_pos] = 1.0;
                     current_pos ++;
                 }
             } else {
                 for(let pos=0; pos < vertex_info.n_vertices_trunk; pos++){
+                    let angleColor = new THREE.Color().setHSL((objs[i].angle / 360.0), 0.5, 0.5);
+                    buffers.color[current_pos*3] = angleColor.r;
+                    buffers.color[current_pos*3 +1] = angleColor.g;
+                    buffers.color[current_pos*3 +2] = angleColor.b;
                     buffers.angle[current_pos] = objs[i].angle;
                     buffers.isLeaf[current_pos] = 0.0;
                     current_pos ++;
@@ -204,6 +212,7 @@ export default class PalmGenerator{
     _createBuffers(n_vert){
         return {
             angle: new Float32Array(n_vert),
+            color: new Float32Array(n_vert * 3),
             isLeaf: new Float32Array(n_vert)
         };
     }
