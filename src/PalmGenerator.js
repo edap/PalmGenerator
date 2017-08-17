@@ -18,7 +18,7 @@ export default class PalmGenerator{
                                                       cleaned_options.num,
                                                       cleaned_options.foliage_start_at);
 
-            buffers = this._createBuffers(hash_vertex_info.tot_vertices);
+            buffers = this._createBuffers(hash_vertex_info.tot_vertices, hash_vertex_info.tot_vertices_in_leafs);
             objects = this._buildPalm(leaf_geometry,
                                       trunk_geometry,
                                       cleaned_options,
@@ -28,6 +28,8 @@ export default class PalmGenerator{
                                                                            hash_vertex_info,
                                                                            buffers);
             this._repositionGeometryAndRotateIt(geometry);
+            this._assignUVs(geometry);
+            geometry.computeFaceNormals();
             result =  { geometry:geometry, buffers: buffers };
         } else {
             objects = this._buildPalm(leaf_geometry,
@@ -36,6 +38,8 @@ export default class PalmGenerator{
                                       curve);
             geometry = this._mergeObjectsInOneGeometry(objects, cleaned_options);
             this._repositionGeometryAndRotateIt(geometry);
+            this._assignUVs(geometry);
+            geometry.computeFaceNormals();
             result =  { geometry:geometry };
         }
         return result;
@@ -150,6 +154,8 @@ export default class PalmGenerator{
 
 
     _transformIntoLeaf(object, iter, angleInRadians, options){
+        let random = false;
+        let randomDivergence = 0.2;
         let PItoDeg = (Math.PI/180.0);
         // The scale ratio is a value between 0.001 and 1.
         // It is 0.0001 for the first leaves, and 1 for the last one
@@ -157,11 +163,19 @@ export default class PalmGenerator{
         // This is to avaoid a scaleRatio of 0, that would cause a warning while scaling
         // an object for 0
         let scaleRatio = ratio === 0 ? 0.001 : ratio;
-        object.rotateZ( iter* angleInRadians);
-        let yrot = (iter/options.angle_open) * options.foliage_start_at;
-        //object.rotateY( (yrot ) * -PItoDeg );
-        let y_angle = options.angle_open * scaleRatio;
-        object.rotateY( (options.starting_angle_open + y_angle + iter * 200/options.num ) * -PItoDeg );
+        //TODO implement random rotation
+        if (random) {
+            let angleRandomizedZ = this._getRandomArbitrary(angleInRadians, (angleInRadians + randomDivergence));
+            object.rotateZ( iter* angleRandomizedZ);
+
+            let y_angle = options.angle_open * scaleRatio;
+            let angleRandomizedY = this._getRandomArbitrary(angleInRadians, (y_angle + randomDivergence));
+            object.rotateY( (options.starting_angle_open + angleRandomizedY + iter * 200/options.num ) * -PItoDeg );
+        } else {
+            object.rotateZ( iter* angleInRadians);
+            let y_angle = options.angle_open * scaleRatio;
+            object.rotateY( (options.starting_angle_open + y_angle + iter * 200/options.num ) * -PItoDeg );
+        }
         // as leaves grow up, they become bigger
         object.scale.set(5 * scaleRatio ,1 ,1);
         object.rotateZ(-(Math.PI/2));
@@ -209,11 +223,13 @@ export default class PalmGenerator{
         return geometry;
     }
 
-    _createBuffers(n_vert){
+    _createBuffers(n_vert, n_foliage_vertices){
         return {
             angle: new Float32Array(n_vert),
             color: new Float32Array(n_vert * 3),
-            isLeaf: new Float32Array(n_vert)
+            isLeaf: new Float32Array(n_vert),
+            totVertices: n_vert,
+            totFoliageVertices: n_foliage_vertices
         };
     }
 
@@ -226,7 +242,8 @@ export default class PalmGenerator{
         return{
             tot_vertices: (n_vertices_in_trunk + n_vertices_in_leaf),
             n_vertices_leaf: vertices_in_leaf,
-            n_vertices_trunk: vertices_in_trunk
+            n_vertices_trunk: vertices_in_trunk,
+            tot_vertices_in_leafs: n_vertices_in_leaf
         };
     }
 
@@ -240,5 +257,28 @@ export default class PalmGenerator{
         geometry.rotateX(-Math.PI/2);
         let box = new THREE.Box3().setFromPoints(geometry.vertices);
         geometry.applyMatrix( new THREE.Matrix4().makeTranslation(0, (box.min.y * -1), 0));
+    }
+
+    _getRandomArbitrary(min, max){
+        return Math.random() * (max -min) +min;
+    }
+    _assignUVs(geometry) {
+        geometry.faceVertexUvs[0] = [];
+        geometry.faces.forEach(function(face) {
+            var components = ['x', 'y', 'z'].sort(function(a, b) {
+                return Math.abs(face.normal[a]) > Math.abs(face.normal[b]);
+            });
+
+            var v1 = geometry.vertices[face.a];
+            var v2 = geometry.vertices[face.b];
+            var v3 = geometry.vertices[face.c];
+            geometry.faceVertexUvs[0].push([
+                new THREE.Vector2(v1[components[0]], v1[components[1]]),
+                new THREE.Vector2(v2[components[0]], v2[components[1]]),
+                new THREE.Vector2(v3[components[0]], v3[components[1]])
+            ]);
+        });
+
+        geometry.uvsNeedUpdate = true;
     }
 }
