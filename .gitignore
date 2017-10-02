@@ -18,6 +18,7 @@
 !.gitattributes
 !.gitignore
 !README.md
+!LICENSE.md
 !example.png
 !example-curve.png
 !/src
