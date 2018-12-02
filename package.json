@@ -1,7 +1,7 @@
 {
   "private": true,
-  "name": "example",
-  "description": "Using Three.js with Webpack 2",
+  "name": "palm-generator",
+  "description": "Palm Generator for THREEE.js",
   "engines": {
     "node": ">=7.0.0"
   },
