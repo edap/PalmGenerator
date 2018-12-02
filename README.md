@@ -32,13 +32,13 @@ let palm = new PalmGenerator(leafGeometry, trunkGeometry, options, curve=false);
 
 - `trunk_regular`. Boolean. It defines if the phyllotaxis will deform the trunk or not.
 
-- `buffers`: Boolean. Highly experimental, default is false, updates will follow.
+- `vertex_colors`: Boolean. Enable per vertex color 
 
 - `angle_open`: Float, degree. It defines the disclose angle of the leaves.
 
 - `starting_angle_open` Float, degree. It defines from which angle the leaves will start to disclose.
 
-`curve`. Optional. A CatmullRomCurve3 can be passed as last argument. The first vertex in the curve will define the position of the treetop, the last one will define the position of the part of the trunk that is attached to the ground. Look at the curve in `src/application.js` to have an idea about how to make palms alongside curves. 
+`curve`. Optional. A CatmullRomCurve3 can be passed as last argument. The first vertex in the curve will define the position of the treetop, the last one will define the position of the part of the trunk that is attached to the ground. Look at the curve in `src/App.js` to see an example about how to make palms alongside curves. 
 
 The PalmGenerator returns an object containing an instance of THREE.Geometry.
 
@@ -84,21 +84,17 @@ let palm_opt = {
     growth: 0.12,
     foliage_start_at: 56,
     trunk_regular: false,
-    buffers: false,
     angle_open: 36.17,
     starting_angle_open: 50
 };
 
-let palm = new PalmGenerator(leafGeometry,
+let palmGeometry = new PalmGenerator(leafGeometry,
                             trunkGeometry,
                             palm_opt);
-let geometry = palm.geometry;
-let bufGeometry = new THREE.BufferGeometry().fromGeometry(geometry);
-let mesh = new THREE.Mesh(bufGeometry, material);
-scene.add( mesh );
+let mesh = new THREE.Mesh(palmGeometry, material);
+scene.add(mesh);
 ```
 
-The `leaf_opt` hash contains a bunch of options, you can have an idea about what each option is doing playing around with this [demo](http://davideprati.com/demo/LeafGeometry/).
 The previous snippet should generate a palm like this one:
 
 ![example](example.png)
@@ -126,8 +122,6 @@ A palm like the following one is created:
 ![example](example-curve.png)
 
 
-## Online Editor
-If you want to generate your palm playing around with the parameters, try the [Palm Generator Online Editor](http://davideprati.com/demo/palm-generator-editor/)
 
 
 

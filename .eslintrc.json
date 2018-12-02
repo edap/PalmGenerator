@@ -145,7 +145,7 @@
 		"func-style": ["error", "declaration", {"allowArrowFunctions": true}],
 		"id-length": 0,
 		"id-match": 0,
-		"indent": ["error", "tab", {"SwitchCase": 1}],
+		// "indent": ["error", "tab", {"SwitchCase": 1}],
 		"jsx-quotes": ["error", "prefer-double"],
 		"key-spacing": ["error", {"beforeColon": false, "afterColon": true}],
 		"linebreak-style": ["error", "unix"],
