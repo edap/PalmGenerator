@@ -1,5 +1,6 @@
 {
   "name": "palm-generator",
+  "description": "Palm Generator for THREEE.js",
   "version": "1.0.0",
   "private": true,
   "dependencies": {
