@@ -14,7 +14,6 @@
 #-----------------------------------------------------------------------------#
 
 !.editorconfig
-!.eslintrc.json
 !.gitattributes
 !.gitignore
 !README.md
@@ -23,7 +22,6 @@
 !example-curve.png
 !/src
 !/package.json
-!/webpack.config.js
 
 
 #-----------------------------------------------------------------------------#
