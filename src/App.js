@@ -74,7 +74,7 @@ export default function App(){
   return (
     <StrictMode>
       <Canvas
-        frameloop='demand'
+        frameloop="demand"
         camera={ {
           fov: 45,
           position: [0, 120, 70]
